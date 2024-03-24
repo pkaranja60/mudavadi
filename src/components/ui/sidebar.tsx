@@ -1,74 +1,128 @@
 "use client";
 
+import { motion, useAnimationControls, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Button } from "./button";
-import { motion } from "framer-motion";
-import { useState } from "react";
 import { BusFront, ContactRound, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
+import NavLinks from "../navLinks";
 
 const links = [
-  { url: "/dashboard", title: "Dashboard" },
-  { url: "/dashboard/drivers", title: "Drivers" },
-  { url: "/dashboard/vehicles", title: "Vehicles" },
+  { url: "/dashboard", title: "Dashboard", icon: LayoutDashboard },
+  { url: "/dashboard/drivers", title: "Drivers", icon: ContactRound },
+  { url: "/dashboard/vehicles", title: "Vehicles", icon: BusFront },
 ];
 
+const containerVariants = {
+  close: {
+    width: "76px",
+    transition: {
+      type: "spring",
+      damping: 15,
+      duration: 0.5,
+    },
+  },
+  open: {
+    width: "176px",
+    transition: {
+      type: "spring",
+      damping: 15,
+      duration: 0.5,
+    },
+  },
+};
+
+const topVariants = {
+  closed: {
+    rotate: 0,
+  },
+  opened: {
+    rotate: 45,
+    backgroundColor: "rgb(255, 0, 0)",
+  },
+};
+
+const centerVariants = {
+  closed: {
+    opacity: 1,
+  },
+  opened: {
+    opacity: 0,
+  },
+};
+
+const bottomVariants = {
+  closed: {
+    rotate: 0,
+  },
+  opened: {
+    rotate: -45,
+    backgroundColor: "rgb(255, 0, 0)",
+  },
+};
+
 export default function Sidebar() {
-  const [open, setOpen] = useState(false);
-  const topVariants = {
-    closed: {
-      rotate: 0,
-    },
-    opened: {
-      rotate: 45,
-      backgroundColor: "rgb(255, 255, 255)",
-    },
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+
+  const containerControls = useAnimationControls();
+
+  useEffect(() => {
+    if (isOpen) {
+      containerControls.start("open");
+    } else {
+      containerControls.start("close");
+    }
+  }, [containerControls, isOpen]);
+
+  const handleOpenClose = () => {
+    setIsOpen((prevIsOpen) => !prevIsOpen);
+
+    setSelectedProject(null);
   };
 
-  const centerVariants = {
-    closed: {
-      opacity: 1,
-    },
-    opened: {
-      opacity: 0,
-    },
-  };
-
-  const bottomVariants = {
-    closed: {
-      rotate: 0,
-    },
-    opened: {
-      rotate: -45,
-      backgroundColor: "rgb(255, 255, 255)",
-    },
-  };
   return (
-    <nav className="h-screen w-[76px] bg-[#ebebeb] border-r-2 border-r-slate-200">
-      <div className="h-[76px]">
-        <Button
-          className="flex flex-col gap-1.5 bg-[#444444] rounded-none w-[76px] h-[76px]"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          <motion.div
-            variants={topVariants}
-            animate={open ? "opened" : "closed"}
-            className="w-12 h-1 bg-white rounded origin-left"
-          ></motion.div>
-          <motion.div
-            variants={centerVariants}
-            animate={open ? "opened" : "closed"}
-            className="w-12 h-1 bg-white rounded"
-          ></motion.div>
-          <motion.div
-            variants={bottomVariants}
-            animate={open ? "opened" : "closed"}
-            className="w-12 h-1 bg-white rounded origin-left"
-          ></motion.div>
-        </Button>
-      </div>
-      <div className="flex flex-col gap-4 h-[calc(100vh - 76px)] py-5">
-       
-      </div>
-    </nav>
+    <>
+      <motion.nav
+        variants={containerVariants}
+        animate={containerControls}
+        initial="close"
+        className="bg-[#ebebeb] flex flex-col z-10 gap-3.5 absolute top-0 left-0 h-full border-r-2 border-slate-200 "
+      >
+        <div className="flex flex-row justify-center place-items-center h-[76px] border-b-2 border-b-slate-300">
+          <Button
+            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center"
+            onClick={handleOpenClose}
+          >
+            <motion.div
+              variants={topVariants}
+              animate={isOpen ? "opened" : "closed"}
+              className="w-11 h-1.5 bg-white rounded origin-left"
+            ></motion.div>
+            <motion.div
+              variants={centerVariants}
+              animate={isOpen ? "opened" : "closed"}
+              className="w-11 h-1.5 bg-white rounded"
+            ></motion.div>
+            <motion.div
+              variants={bottomVariants}
+              animate={isOpen ? "opened" : "closed"}
+              className="w-11 h-1.5 bg-white rounded origin-left"
+            ></motion.div>
+          </Button>
+        </div>
+        <div className="flex flex-col">
+          {/* LINKS */}
+          {links.map((link) => (
+            <NavLinks
+              key={link.title}
+              link={link}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
+          ))}
+        </div>
+      </motion.nav>
+    </>
   );
 }

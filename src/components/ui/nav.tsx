@@ -75,7 +75,7 @@ export default function Navbar() {
                 <DropdownMenuItem>New Team</DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem className="bg-red-500 text-white px-5">
                 Log out
                 <DropdownMenuShortcut>
                   <LogOut />

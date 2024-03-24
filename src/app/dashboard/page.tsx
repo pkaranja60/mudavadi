@@ -16,7 +16,7 @@ export default function Dashboard() {
       <div className="h-24 flex items-center px-14 text-2xl font-bold  capitalize">
         <h1>{pathname.slice(1)}</h1>
       </div>
-      <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex-1 space-y-4 px-20 pt-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
