@@ -1,0 +1,36 @@
+import * as z from "zod";
+
+const getCurrentYear = () => new Date().getFullYear();
+
+const phoneNumberValidation = z
+  .string()
+  .regex(/^254\d{9}$/, "Phone number must start with 254 and be max 12 digits");
+
+export const DriverSchema = z.object({
+  firstName: z.string().min(1, {
+    message: "First name is required",
+  }),
+  surName: z.string().min(1, {
+    message: "Last name is required",
+  }),
+  nationalID: z.string().min(2, { message: "National ID is required" }),
+  phoneNumber: phoneNumberValidation,
+  licenseNumber: z.string().min(2, {
+    message: "License number is required",
+  }),
+  licenseExpiration: z.date().min(new Date(getCurrentYear(), 0, 1), {
+    message: "Insurance expiration date is required",
+  }),
+  driverStatus: z.enum(["active", "suspended", "inactive"]).default("active"),
+});
+
+export const VehicleSchema = z.object({
+  vehicleReg: z.string().min(1, {
+    message: "Vehicle registration is required",
+  }),
+  insuranceExpiration: z.date().min(new Date(getCurrentYear(), 0, 1), {
+    message: "Insurance expiration date is required",
+  }),
+  vehicleStatus: z.enum(["active", "inactive"]),
+  VehicleType: z.enum(["class I", "class II", "class III", "class IV", "class V"]),
+});
