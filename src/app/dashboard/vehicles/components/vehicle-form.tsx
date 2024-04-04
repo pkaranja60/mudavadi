@@ -13,7 +13,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DriverSchema, VehicleSchema } from "@/schema";
+import { VehicleSchema } from "@/schema";
 import {
   Popover,
   PopoverContent,
@@ -34,7 +34,7 @@ import { z } from "zod";
 
 export default function VehicleForm() {
   const form = useForm<z.infer<typeof VehicleSchema>>({
-    resolver: zodResolver(DriverSchema),
+    resolver: zodResolver(VehicleSchema),
     defaultValues: {
       vehicleReg: "",
       insuranceExpiration: new Date(),
@@ -127,6 +127,12 @@ export default function VehicleForm() {
                     </SelectContent>
                   </Select>
                   <FormMessage {...field} />
+                  <FormDescription className="text-xs">
+                    Please ensure the vehicle type is correct. Default option is{" "}
+                    <span className="text-red-300  font-medium">
+                      {field.value}
+                    </span>
+                  </FormDescription>
                 </FormItem>
               )}
             />
@@ -156,13 +162,13 @@ export default function VehicleForm() {
                       <SelectItem value="class V">class V</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>
+                  <FormMessage {...field} />
+                  <FormDescription className="text-xs">
                     Please ensure the vehicle type is correct. Default option is{" "}
-                    <span className="text-red-300 text-base font-medium">
+                    <span className="text-red-300  font-medium">
                       {field.value}
                     </span>
                   </FormDescription>
-                  <FormMessage {...field} />
                 </FormItem>
               )}
             />

@@ -7,6 +7,7 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -196,6 +197,12 @@ export default function DriverForm() {
                     </SelectContent>
                   </Select>
                   <FormMessage {...field} />
+                  <FormDescription className="text-xs">
+                    Please ensure the vehicle type is correct. Default option is{" "}
+                    <span className="text-red-300  font-medium">
+                      {field.value}
+                    </span>
+                  </FormDescription>
                 </FormItem>
               )}
             />
