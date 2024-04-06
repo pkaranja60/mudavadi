@@ -10,10 +10,10 @@ export const DriverSchema = z.object({
   firstName: z.string().min(1, {
     message: "First name is required",
   }),
-  surName: z.string().min(1, {
+  lastName: z.string().min(1, {
     message: "Last name is required",
   }),
-  nationalID: z.string().min(2, { message: "National ID is required" }),
+  nationalId: z.string().min(2, { message: "National ID is required" }),
   phoneNumber: phoneNumberValidation,
   licenseNumber: z.string().min(2, {
     message: "License number is required",
@@ -32,5 +32,11 @@ export const VehicleSchema = z.object({
     message: "Insurance expiration date is required",
   }),
   vehicleStatus: z.enum(["active", "inactive"]),
-  VehicleType: z.enum(["class I", "class II", "class III", "class IV", "class V"]),
+  VehicleType: z.enum([
+    "class I",
+    "class II",
+    "class III",
+    "class IV",
+    "class V",
+  ]),
 });

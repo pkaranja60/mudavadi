@@ -91,7 +91,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-row justify-center place-items-center h-[76px] border-b-2 border-b-slate-300">
           <Button
-            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center"
+            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center bg-[#fdb255]"
             onClick={handleOpenClose}
           >
             <motion.div

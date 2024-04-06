@@ -31,14 +31,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { z } from "zod";
+import service, { CreateDriverParams } from "@/appwrite/config";
+import { toast } from "sonner";
 
 export default function DriverForm() {
   const form = useForm<z.infer<typeof DriverSchema>>({
     resolver: zodResolver(DriverSchema),
     defaultValues: {
       firstName: "",
-      surName: "",
-      nationalID: "",
+      lastName: "",
+      nationalId: "",
       phoneNumber: "",
       licenseNumber: "",
       licenseExpiration: new Date(),
@@ -46,9 +48,31 @@ export default function DriverForm() {
     },
   });
 
-  const onSubmit = () => {
-    console.log("submitted");
+  const onSubmit = async (data: CreateDriverParams) => {
+    try {
+      const result = await service.createDriver(data);
+      if (result) {
+        // Show toast notification for success
+        toast.success("Driver created successfully!", {
+          duration: 5500,
+        });
+
+        console.log("Driver created successfully!");
+        // Reset the form to its default values
+        form.reset();
+      } else {
+        toast.error("Failed to create driver.", {
+          duration: 5500,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating driver:", error);
+      toast.error(`Error creating driver: ${error}`, {
+        duration: 5500,
+      });
+    }
   };
+
   return (
     <Card className="p-5">
       <CardHeader className="text-center text-lg font-bold">
@@ -60,7 +84,7 @@ export default function DriverForm() {
             <div className="w-1/2">
               <FormField
                 control={form.control}
-                name="surName"
+                name="lastName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
@@ -108,7 +132,7 @@ export default function DriverForm() {
           <div>
             <FormField
               control={form.control}
-              name="nationalID"
+              name="nationalId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>National ID</FormLabel>
@@ -209,7 +233,7 @@ export default function DriverForm() {
           </div>
 
           <div>
-            <Button className="w-full h-14">Submit</Button>
+            <Button className="w-full h-14 bg-[#fdb255]">Submit</Button>
           </div>
         </form>
       </Form>
