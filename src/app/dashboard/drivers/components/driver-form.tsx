@@ -31,7 +31,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { z } from "zod";
-import service, { CreateDriverParams } from "@/appwrite/config";
 import { toast } from "sonner";
 
 export default function DriverForm() {
@@ -48,29 +47,29 @@ export default function DriverForm() {
     },
   });
 
-  const onSubmit = async (data: CreateDriverParams) => {
-    try {
-      const result = await service.createDriver(data);
-      if (result) {
-        // Show toast notification for success
-        toast.success("Driver created successfully!", {
-          duration: 5500,
-        });
+  const onSubmit = async () => {
+    // try {
+  
+    //   if (result) {
+    //     // Show toast notification for success
+    //     toast.success("Driver created successfully!", {
+    //       duration: 5500,
+    //     });
 
-        console.log("Driver created successfully!");
-        // Reset the form to its default values
-        form.reset();
-      } else {
-        toast.error("Failed to create driver.", {
-          duration: 5500,
-        });
-      }
-    } catch (error) {
-      console.error("Error creating driver:", error);
-      toast.error(`Error creating driver: ${error}`, {
-        duration: 5500,
-      });
-    }
+    //     console.log("Driver created successfully!");
+    //     // Reset the form to its default values
+    //     form.reset();
+    //   } else {
+    //     toast.error("Failed to create driver.", {
+    //       duration: 5500,
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error("Error creating driver:", error);
+    //   toast.error(`Error creating driver: ${error}`, {
+    //     duration: 5500,
+    //   });
+    // }
   };
 
   return (
@@ -233,7 +232,7 @@ export default function DriverForm() {
           </div>
 
           <div>
-            <Button className="w-full h-14 bg-[#fdb255]">Submit</Button>
+            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">Submit</Button>
           </div>
         </form>
       </Form>

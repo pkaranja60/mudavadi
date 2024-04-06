@@ -175,7 +175,7 @@ export default function VehicleForm() {
           </div>
 
           <div>
-            <Button className="w-full h-14 bg-[#fdb255]">Submit</Button>
+            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">Submit</Button>
           </div>
         </form>
       </Form>

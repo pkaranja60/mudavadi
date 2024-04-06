@@ -38,7 +38,7 @@ const topVariants = {
   },
   opened: {
     rotate: 45,
-    backgroundColor: "rgb(255, 0, 0)",
+    backgroundColor: "rgb(255, 255, 255)",
   },
 };
 
@@ -57,7 +57,7 @@ const bottomVariants = {
   },
   opened: {
     rotate: -45,
-    backgroundColor: "rgb(255, 0, 0)",
+    backgroundColor: "rgb(255, 255, 255)",
   },
 };
 
@@ -91,7 +91,7 @@ export default function Sidebar() {
       >
         <div className="flex flex-row justify-center place-items-center h-[76px] border-b-2 border-b-slate-300">
           <Button
-            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center bg-[#fdb255]"
+            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center bg-[#fdb255] hover:bg-slate-400"
             onClick={handleOpenClose}
           >
             <motion.div

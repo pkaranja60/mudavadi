@@ -9,11 +9,11 @@ const queryClient = new QueryClient();
 
 export default function AppProvider({ children }: any) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ClerkProvider>
+    <ClerkProvider>
+      <QueryClientProvider client={queryClient}>
         {children}
         <Toaster position="top-center" richColors expand visibleToasts={9} />
-      </ClerkProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ClerkProvider>
   );
 }
