@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { VehicleSchema } from "@/schema";
 import {
@@ -31,6 +31,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { z } from "zod";
+import { createNewVehicle } from "@/backend/ApiConfig";
+import { toast } from "sonner";
 
 export default function VehicleForm() {
   const form = useForm<z.infer<typeof VehicleSchema>>({
@@ -39,13 +41,40 @@ export default function VehicleForm() {
       vehicleReg: "",
       insuranceExpiration: new Date(),
       vehicleStatus: "active",
-      VehicleType: "class I",
+      vehicleClass: "I",
     },
   });
 
-  const onSubmit = () => {
-    console.log("submitted");
+  interface FormVehicleData {
+    vehicleReg: string;
+    insuranceExpiration: Date;
+    vehicleStatus: string;
+    vehicleClass: string;
+  }
+
+  const onSubmit: SubmitHandler<FormVehicleData> = async (formData) => {
+    try {
+      const result = await createNewVehicle(formData);
+
+      console.log(result);
+      if (result) {
+        // Show toast notification for success
+        toast.success("Vehicle added successfully!", {
+          duration: 5500,
+        });
+        console.log("Vehicle added successfully!");
+        // Reset the form to its default values
+        form.reset();
+      } else {
+        toast.error("Failed to add vehicle.", {
+          duration: 5500,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding vehicle:", error);
+    }
   };
+
   return (
     <Card className="p-5">
       <CardHeader className="text-center text-lg font-bold">
@@ -61,7 +90,7 @@ export default function VehicleForm() {
                 <FormItem>
                   <FormLabel>Vehicle Registration Number</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="KCDxxxxx" />
+                    <Input {...field} type="text" placeholder="KCDxxxxx"  />
                   </FormControl>
                   <FormMessage {...field} />
                 </FormItem>
@@ -141,10 +170,10 @@ export default function VehicleForm() {
           <div>
             <FormField
               control={form.control}
-              name="VehicleType"
+              name="vehicleClass"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Vehicle Type</FormLabel>
+                  <FormLabel>Vehicle Class</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -155,16 +184,16 @@ export default function VehicleForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="class I">class I</SelectItem>
-                      <SelectItem value="class II">class II</SelectItem>
-                      <SelectItem value="class III">class III</SelectItem>
-                      <SelectItem value="class IV">class IV</SelectItem>
-                      <SelectItem value="class V">class V</SelectItem>
+                      <SelectItem value="I">class I</SelectItem>
+                      <SelectItem value="II">class II</SelectItem>
+                      <SelectItem value="III">class III</SelectItem>
+                      <SelectItem value="IV">class IV</SelectItem>
+                      <SelectItem value="V">class V</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage {...field} />
                   <FormDescription className="text-xs">
-                    Please ensure the vehicle type is correct. Default option is{" "}
+                    Please ensure the vehicle type is correct. Default option is
                     <span className="text-red-300  font-medium">
                       {field.value}
                     </span>
@@ -175,7 +204,9 @@ export default function VehicleForm() {
           </div>
 
           <div>
-            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">Submit</Button>
+            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">
+              Submit
+            </Button>
           </div>
         </form>
       </Form>

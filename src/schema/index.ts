@@ -32,11 +32,15 @@ export const VehicleSchema = z.object({
     message: "Insurance expiration date is required",
   }),
   vehicleStatus: z.enum(["active", "inactive"]),
-  VehicleType: z.enum([
-    "class I",
-    "class II",
-    "class III",
-    "class IV",
-    "class V",
-  ]),
+  vehicleClass: z.enum(["I", "II", "III", "IV", "V"]),
+});
+
+export const DriverTableSchema = z.object({
+  nationalId: z.string(),
+  lastName: z.string(),
+  firstName: z.string(),
+  phone: z.string(),
+  license: z.string(),
+  licenseExpiration: z.string(),
+  status: z.string(),
 });

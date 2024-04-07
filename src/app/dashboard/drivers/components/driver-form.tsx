@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DriverSchema } from "@/schema";
 import {
@@ -32,44 +32,53 @@ import {
 } from "@/components/ui/select";
 import { z } from "zod";
 import { toast } from "sonner";
+import { createNewDriver } from "@/backend/ApiConfig";
 
 export default function DriverForm() {
   const form = useForm<z.infer<typeof DriverSchema>>({
     resolver: zodResolver(DriverSchema),
     defaultValues: {
-      firstName: "",
       lastName: "",
-      nationalId: "",
+      firstName: "",
       phoneNumber: "",
+      nationalId: "",
       licenseNumber: "",
       licenseExpiration: new Date(),
       driverStatus: "active",
     },
   });
 
-  const onSubmit = async () => {
-    // try {
-  
-    //   if (result) {
-    //     // Show toast notification for success
-    //     toast.success("Driver created successfully!", {
-    //       duration: 5500,
-    //     });
+  interface FormData {
+    lastName: string;
+    firstName: string;
+    phoneNumber: string;
+    nationalId: string;
+    licenseNumber: string;
+    licenseExpiration: Date;
+    driverStatus: string;
+  }
 
-    //     console.log("Driver created successfully!");
-    //     // Reset the form to its default values
-    //     form.reset();
-    //   } else {
-    //     toast.error("Failed to create driver.", {
-    //       duration: 5500,
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error("Error creating driver:", error);
-    //   toast.error(`Error creating driver: ${error}`, {
-    //     duration: 5500,
-    //   });
-    // }
+  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+    try {
+      const result = await createNewDriver(formData);
+
+      console.log(result);
+      if (result) {
+        // Show toast notification for success
+        toast.success("Driver created successfully!", {
+          duration: 5500,
+        });
+        console.log("Driver created successfully!");
+        // Reset the form to its default values
+        form.reset();
+      } else {
+        toast.error("Failed to create driver.", {
+          duration: 5500,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating driver:", error);
+    }
   };
 
   return (
@@ -232,7 +241,9 @@ export default function DriverForm() {
           </div>
 
           <div>
-            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">Submit</Button>
+            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">
+              Submit
+            </Button>
           </div>
         </form>
       </Form>

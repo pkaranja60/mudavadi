@@ -36,8 +36,13 @@ export default function Page() {
             </h2>
 
             <p className="mt-4 leading-relaxed text-white/90">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-              nam dolorum aliquam, quibusdam aperiam voluptatum.
+              Accurate ridership data, obtained through a robust bus tally
+              system, is crucial for optimizing public transportation. By
+              precisely understanding passenger volumes on various routes and at
+              different times, transit authorities can allocate resources
+              effectively. This translates to strategically deployed buses,
+              minimized wait times, and a more responsive service that caters to
+              actual community needs.
             </p>
           </div>
         </section>
@@ -67,9 +72,9 @@ export default function Page() {
                 Welcome to Bus Tally System
               </h1>
 
-              <p className="mt-4 leading-relaxed text-gray-500">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+              <p className="mt-3 leading-relaxed text-gray-500">
+                Accurate ridership data, obtained through a robust bus tally
+                system, is crucial for optimizing public transportation.....
               </p>
             </div>
 
@@ -80,7 +85,6 @@ export default function Page() {
                   formFieldInput: "h-10",
                   formButtonPrimary:
                     "w-full h-14 bg-[#fdb255] hover:bg-slate-400 text-sm normal-case",
-              
                 },
               }}
             />
