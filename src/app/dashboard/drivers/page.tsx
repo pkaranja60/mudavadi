@@ -31,7 +31,7 @@ export default function DriverPage() {
               "Loading..."
             ) : (
               <div>
-                <DataTable columns={columns} data={drivers} /> 
+                {/* <DataTable columns={columns} data={drivers} />  */}
               </div>
             )}
           </div>

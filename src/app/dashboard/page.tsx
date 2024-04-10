@@ -1,5 +1,6 @@
 "use client";
 
+import { getAllDrivers } from "@/backend/ApiConfig";
 import {
   Card,
   CardHeader,
@@ -8,9 +9,37 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+interface Driver {
+  id: string;
+  lastName: string;
+  firstName: string;
+  phoneNumber: string;
+  nationalId: string;
+  licenseNumber: string;
+  licenseExpiration: Date;
+  driverStatus: string;
+}
 
 export default function Dashboard() {
   const pathname = usePathname();
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+
+  useEffect(() => {
+    getAllDriverList();
+  }, []);
+
+  const getAllDriverList = async () => {
+    try {
+      const drivers = await getAllDrivers();
+      setDrivers(drivers); // Set the drivers in state
+    } catch (error) {
+      console.error("Error fetching drivers:", error);
+      // Handle error (e.g., display toast)
+    }
+  };
+
   return (
     <main className="w-full">
       <div className="h-24 flex items-center px-14 text-2xl font-bold  capitalize">
@@ -78,7 +107,9 @@ export default function Dashboard() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">TIckets Sold</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                TIckets Sold
+              </CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -140,8 +171,23 @@ export default function Dashboard() {
               <CardTitle>Active Drivers</CardTitle>
               <CardDescription>Active routes this month.</CardDescription>
             </CardHeader>
+
             <CardContent>
-              <p>To be Updated Soon!</p>
+              {drivers.map((driver) => (
+                <div
+                  key={driver.id}
+                  className="flex flex-row items-center space-x-2"
+                >
+                  <p>
+                    Name:{driver.lastName} {driver.firstName}
+                  </p>
+                  <p>Phone Number: +{driver.phoneNumber}</p>
+
+                  <p>
+                    Driver Status: <span className="text-green-600 bg-green-100 p-1 rounded">{driver.driverStatus}</span>{" "}
+                  </p>
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>

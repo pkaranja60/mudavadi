@@ -7,12 +7,13 @@ import { toast } from "sonner";
 const hygraph = new GraphQLClient(config.hygraphUrl);
 
 interface Driver {
+    id: string;
   lastName: string;
   firstName: string;
   phoneNumber: string;
   nationalId: string;
   licenseNumber: string;
-  licenseExpiration: string;
+  licenseExpiration: Date;
   driverStatus: string;
 }
 
