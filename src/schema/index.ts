@@ -35,12 +35,22 @@ export const VehicleSchema = z.object({
   vehicleClass: z.enum(["I", "II", "III", "IV", "V"]),
 });
 
-export const DriverTableSchema = z.object({
-  nationalId: z.string(),
+export const DriverDataSchema = z.object({
   lastName: z.string(),
   firstName: z.string(),
-  phone: z.string(),
-  license: z.string(),
-  licenseExpiration: z.string(),
-  status: z.string(),
+  phoneNumber: z.string(),
+  nationalId: z.string(),
+  licenseNumber: z.string(),
+  licenseExpiration: z.date(),
+  driverStatus: z.string(),
 });
+
+export const VehicleDataSchema = z.object({
+  vehicleReg: z.string(),
+  insuranceExpiration: z.date(),
+  vehicleStatus: z.string(),
+  vehicleClass: z.string(),
+});
+
+export type DriverData = z.infer<typeof DriverDataSchema>;
+export type VehicleData = z.infer<typeof VehicleDataSchema>

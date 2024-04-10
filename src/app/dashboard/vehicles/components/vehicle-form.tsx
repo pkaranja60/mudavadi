@@ -13,7 +13,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { VehicleSchema } from "@/schema";
+import { VehicleData, VehicleSchema } from "@/schema";
 import {
   Popover,
   PopoverContent,
@@ -45,14 +45,8 @@ export default function VehicleForm() {
     },
   });
 
-  interface FormVehicleData {
-    vehicleReg: string;
-    insuranceExpiration: Date;
-    vehicleStatus: string;
-    vehicleClass: string;
-  }
 
-  const onSubmit: SubmitHandler<FormVehicleData> = async (formData) => {
+  const onSubmit: SubmitHandler<VehicleData> = async (formData) => {
     try {
       const result = await createNewVehicle(formData);
 
@@ -76,12 +70,12 @@ export default function VehicleForm() {
   };
 
   return (
-    <Card className="p-5">
-      <CardHeader className="text-center text-lg font-bold">
+    <Card className="p-3 lg:p-5 text-base lg:text-lg ">
+      <div className="text-center font-bold py-2">
         Add New Vehicle
-      </CardHeader>
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
           <div>
             <FormField
               control={form.control}

@@ -2,36 +2,9 @@ import { GraphQLClient, Variables  } from "graphql-request";
 import config from "@/backend/config";
 import { gql } from "graphql-request";
 import { toast } from "sonner";
-
+import { DriverData, VehicleData } from "@/schema";
 
 const hygraph = new GraphQLClient(config.hygraphUrl);
-
-interface Driver {
-    id: string;
-  lastName: string;
-  firstName: string;
-  phoneNumber: string;
-  nationalId: string;
-  licenseNumber: string;
-  licenseExpiration: Date;
-  driverStatus: string;
-}
-
-interface FormDriverData {
-  lastName: string;
-  firstName: string;
-  phoneNumber: string;
-  nationalId: string;
-  licenseNumber: string;
-  licenseExpiration: Date;
-  driverStatus: string;
-}
-interface FormVehicleData {
-    vehicleReg: string;
-  insuranceExpiration: Date;
-  vehicleStatus: string;
-  vehicleClass: string;
-}
 
 const getAllDrivers = async () => {
   const queryGetDrivers = gql`
@@ -50,7 +23,7 @@ const getAllDrivers = async () => {
   `;
 
   try {
-    const { drivers } = await hygraph.request<{ drivers: Driver[] }>(
+    const { drivers } = await hygraph.request<{ drivers: DriverData[] }>(
       queryGetDrivers
     );
     return drivers;
@@ -63,7 +36,7 @@ const getAllDrivers = async () => {
   }
 };
 
-const createNewDriver = async (formData: FormDriverData) => {
+const createNewDriver = async (formData: DriverData) => {
     const variables: Variables = {
         lastName: formData.lastName,
         firstName: formData.firstName,
@@ -113,7 +86,7 @@ const createNewDriver = async (formData: FormDriverData) => {
   }
 };
 
-const createNewVehicle = async (formData: FormVehicleData) => {
+const createNewVehicle = async (formData: VehicleData) => {
     const variables: Variables = {
         vehicleReg: formData.vehicleReg, 
         insuranceExpiration: formData.insuranceExpiration,

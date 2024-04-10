@@ -1,44 +1,11 @@
 "use client";
 
-import { getAllDrivers } from "@/backend/ApiConfig";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-
-interface Driver {
-  id: string;
-  lastName: string;
-  firstName: string;
-  phoneNumber: string;
-  nationalId: string;
-  licenseNumber: string;
-  licenseExpiration: Date;
-  driverStatus: string;
-}
+import ActiveDriver from "./components/ActiveDriver";
 
 export default function Dashboard() {
   const pathname = usePathname();
-  const [drivers, setDrivers] = useState<Driver[]>([]);
-
-  useEffect(() => {
-    getAllDriverList();
-  }, []);
-
-  const getAllDriverList = async () => {
-    try {
-      const drivers = await getAllDrivers();
-      setDrivers(drivers); // Set the drivers in state
-    } catch (error) {
-      console.error("Error fetching drivers:", error);
-      // Handle error (e.g., display toast)
-    }
-  };
 
   return (
     <main className="w-full">
@@ -166,30 +133,10 @@ export default function Dashboard() {
               <p>To be Updated Soon!</p>
             </CardContent>
           </Card>
-          <Card className="col-span-3">
-            <CardHeader>
-              <CardTitle>Active Drivers</CardTitle>
-              <CardDescription>Active routes this month.</CardDescription>
-            </CardHeader>
 
-            <CardContent>
-              {drivers.map((driver) => (
-                <div
-                  key={driver.id}
-                  className="flex flex-row items-center space-x-2"
-                >
-                  <p>
-                    Name:{driver.lastName} {driver.firstName}
-                  </p>
-                  <p>Phone Number: +{driver.phoneNumber}</p>
+          {/* ActiveDrivers */}
 
-                  <p>
-                    Driver Status: <span className="text-green-600 bg-green-100 p-1 rounded">{driver.driverStatus}</span>{" "}
-                  </p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <ActiveDriver />
         </div>
       </div>
     </main>

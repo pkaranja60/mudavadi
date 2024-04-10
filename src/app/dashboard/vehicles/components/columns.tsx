@@ -1,27 +1,24 @@
 "use client";
 
+import { VehicleData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "Active" | "Inactive" ;
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<VehicleData>[] = [
   {
-    accessorKey: "status",
+    accessorKey: "vehicleReg",
+    header: "vehicle Registration",
+  },
+  {
+    accessorKey: "insuranceExpiration",
+    header: "insurance Expiration",
+  },
+  {
+    accessorKey: "vehicleStatus",
     header: "Status",
   },
+
   {
-    accessorKey: "regNo",
-    header: "RegNo",
-  },
-  {
-    accessorKey: "type",
-    header: "Type",
+    accessorKey: "vehicleClass",
+    header: "Vehicle Class",
   },
 ];

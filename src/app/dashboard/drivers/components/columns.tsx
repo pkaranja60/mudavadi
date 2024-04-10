@@ -1,14 +1,9 @@
 "use client";
 
-import { DriverTableSchema } from "@/schema";
+import { DriverData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { z } from "zod";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Driver = z.infer<typeof DriverTableSchema>;
-
-export const columns: ColumnDef<Driver>[] = [
+export const columns: ColumnDef<DriverData>[] = [
   {
     accessorKey: "nationalId",
     header: "National ID",
@@ -22,19 +17,19 @@ export const columns: ColumnDef<Driver>[] = [
     header: "First Name",
   },
   {
-    accessorKey: "phone",
-    header: "PhoneNo",
+    accessorKey: "phoneNumber",
+    header: "Phone Number",
   },
   {
-    accessorKey: "license",
-    header: "LicenseNo",
+    accessorKey: "licenseNumber",
+    header: "License Number",
   },
   {
     accessorKey: "licenseExpiration",
     header: "License Expiration",
   },
   {
-    accessorKey: "status",
+    accessorKey: "driverStatus",
     header: "Status",
   },
 ];

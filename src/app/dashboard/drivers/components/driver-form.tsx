@@ -13,7 +13,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DriverSchema } from "@/schema";
+import { DriverData, DriverSchema } from "@/schema";
 import {
   Popover,
   PopoverContent,
@@ -48,17 +48,7 @@ export default function DriverForm() {
     },
   });
 
-  interface FormData {
-    lastName: string;
-    firstName: string;
-    phoneNumber: string;
-    nationalId: string;
-    licenseNumber: string;
-    licenseExpiration: Date;
-    driverStatus: string;
-  }
-
-  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+  const onSubmit: SubmitHandler<DriverData> = async (formData) => {
     try {
       const result = await createNewDriver(formData);
 
@@ -82,13 +72,11 @@ export default function DriverForm() {
   };
 
   return (
-    <Card className="p-5">
-      <CardHeader className="text-center text-lg font-bold">
-        Add New Driver
-      </CardHeader>
+    <Card className="p-3.5">
+      <div className="text-center text-lg font-bold py-2">Add New Driver</div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-3 items-center">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
+          <div className="flex flex-row gap-3 items-center">
             <div className="w-1/2">
               <FormField
                 control={form.control}
@@ -153,7 +141,7 @@ export default function DriverForm() {
             />
           </div>
 
-          <div className="flex flex-col md:flex-row gap-3 items-center">
+          <div className="flex flex-row gap-3 items-center">
             <div className="w-1/2">
               <FormField
                 control={form.control}

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { DataTable } from "@/components/data-table";
-import { columns, Payment } from "./components/columns";
+import { columns} from "./components/columns";
 import VehicleForm from "./components/vehicle-form";
 
 export default function VehiclePage() {
@@ -13,12 +13,13 @@ export default function VehiclePage() {
         <h1>{pathname.slice(1)}</h1>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-7 gap-5 px-20 pt-6">
-        <div className="col-span-5">
+      <div className="grid grid-cols-4 gap-5 px-5 lg:px-20">
+        <div className="cols-span-3">
           {/* <DataTable columns={columns} data={} /> */}
+          <VehicleForm />
         </div>
 
-        <div className="col-span-2">
+        <div className="cols-span-1">
           <VehicleForm />
         </div>
       </div>
