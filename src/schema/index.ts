@@ -36,7 +36,6 @@ export const VehicleSchema = z.object({
 });
 
 export const DriverDataSchema = z.object({
-  id: z.string().nullable(),
   lastName: z.string(),
   firstName: z.string(),
   phoneNumber: z.string(),
@@ -54,4 +53,4 @@ export const VehicleDataSchema = z.object({
 });
 
 export type DriverData = z.infer<typeof DriverDataSchema>;
-export type VehicleData = z.infer<typeof VehicleDataSchema>;
+export type VehicleData = z.infer<typeof VehicleDataSchema>

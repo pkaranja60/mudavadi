@@ -37,7 +37,7 @@ export default function ActiveDriver() {
       <CardContent>
         {drivers.map((driver) => (
           <div
-            key={driver.id}
+            key={driver.nationalId}
             className="flex flex-row items-center justify-between"
           >
             <div className="flex gap-3 items-center">
