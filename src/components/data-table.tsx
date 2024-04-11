@@ -26,15 +26,52 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]) // confirm whether it is a curly bracket or normal bracket
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFilterChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: setSorting,
+    state: {
+      columnFilters,
+      columnVisibility,
+      sorting,
+    }
   });
 
   return (
     <>
+    <div className='flex items-center py-4'>
+      <Input className='max-w-sm' placeholder='Filter by National Id' value={table.getColumn('nationalId')?.getFilterValue() as string || ''} onChange={e => { table.getColumn('nationalId')?.setFilterValue(e.target.value)}} />
+    
+    <div>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant='ghost' className='ml-auto'>
+            Columns
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+{table.getAllColumns().filter(column =>column.getCanHide()).map(column =>{
+  return(
+    <DropdownMenuCheckBoxItem key={column.id} className='capitalize' checked={column.getVisible()} onCheckedChange={(value: boolean) =>{
+      column.toggleVisibility(!!value);
+    }}>
+      {column.id}
+    </DropdownMenuCheckBoxItem>
+  )
+})}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+    </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

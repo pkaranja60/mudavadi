@@ -10,7 +10,16 @@ export const columns: ColumnDef<DriverData>[] = [
   },
   {
     accessorKey: "lastName",
-    header: "Last Name",
+    header: ({header})=>{
+      <Button variant='ghost' onClick={
+        ()=>{
+          column.toggleSorting(column.getIsSorted() === 'asc')
+        }
+      }>
+        Last Name
+        <ArrowUpDown className='w-4 h-4 ml-3' />
+      </Button>
+    },
   },
   {
     accessorKey: "firstName",
@@ -27,9 +36,31 @@ export const columns: ColumnDef<DriverData>[] = [
   {
     accessorKey: "licenseExpiration",
     header: "License Expiration",
+    cell: ({row})=>{
+      const licenseExpiration = row.getValue('licenseExpiration');
+      const formatted = new Date(licenseExpiration as string).toLocaleDateString();
+      return <div>{formatted}</div>
+    }
   },
   {
     accessorKey: "driverStatus",
     header: "Status",
   },
+  {
+    id: 'actions',
+    cell: ({row})=>{
+      return <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className='w-8 h-8 p-0'>
+            <MoreHorizontal className='h-4 w-4' />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem>Update</DropdownMenuItem>
+          <DropdownMenuItem>delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    }
+  }
 ];
