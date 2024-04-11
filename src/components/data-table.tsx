@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex justify-between p-1.5">
+      <div className="flex justify-end gap-3 py-2.5">
         <button className='p-2 text-sm rounded border' onClick={() => table.previousPage()}>Previous</button>
         <button className='p-2 text-sm rounded border' onClick={() => table.nextPage()}>Next</button>
       </div>
