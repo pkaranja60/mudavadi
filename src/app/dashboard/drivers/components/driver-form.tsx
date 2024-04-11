@@ -164,7 +164,7 @@ export default function DriverForm() {
                 name="licenseExpiration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>License Expiration Date</FormLabel>
+                    <FormLabel>License Expiration</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>

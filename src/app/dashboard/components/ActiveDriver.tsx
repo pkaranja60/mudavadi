@@ -8,20 +8,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface DriverActiveData {
-  id: string;
-  lastName: string;
-  firstName: string;
-  phoneNumber: string;
-  nationalId: string;
-  licenseNumber: string;
-  licenseExpiration: Date;
-  driverStatus: string;
-}
+import { DriverData } from "@/schema";
 
 export default function ActiveDriver() {
-  const [drivers, setDrivers] = useState<DriverActiveData[]>([]);
+  const [drivers, setDrivers] = useState<DriverData[]>([]);
 
   useEffect(() => {
     getAllDriverList();
