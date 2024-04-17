@@ -19,8 +19,11 @@ export default function ActiveDriver() {
 
   const getAllDriverList = async () => {
     try {
-      const drivers = await getAllDrivers();
-      setDrivers(drivers); // Set the drivers in state
+      const allDrivers = await getAllDrivers();
+      const activeDrivers = allDrivers.filter(
+        (driver) => driver.driverStatus === "active"
+      );
+      setDrivers(activeDrivers); // Set the drivers in state
     } catch (error) {
       console.error("Error fetching drivers:", error);
       // Handle error (e.g., display toast)
@@ -38,7 +41,7 @@ export default function ActiveDriver() {
         {drivers.map((driver) => (
           <div
             key={driver.nationalId}
-            className="flex flex-row items-center justify-between"
+            className="flex flex-row items-center justify-between py-3"
           >
             <div className="flex gap-3 items-center">
               <Avatar className="w-8 h-8">

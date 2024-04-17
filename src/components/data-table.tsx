@@ -2,10 +2,15 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -16,6 +21,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from "react";
+import { Input } from "./ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -26,9 +40,12 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>([])
-  const [sorting, setSorting] = React.useState<SortingState>([]) // confirm whether it is a curly bracket or normal bracket
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
@@ -36,42 +53,59 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onColumnFilterChange: setColumnFilters,
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
     state: {
       columnFilters,
       columnVisibility,
       sorting,
-    }
+    },
   });
 
   return (
     <>
-    <div className='flex items-center py-4'>
-      <Input className='max-w-sm' placeholder='Filter by National Id' value={table.getColumn('nationalId')?.getFilterValue() as string || ''} onChange={e => { table.getColumn('nationalId')?.setFilterValue(e.target.value)}} />
-    
-    <div>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Button variant='ghost' className='ml-auto'>
-            Columns
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-{table.getAllColumns().filter(column =>column.getCanHide()).map(column =>{
-  return(
-    <DropdownMenuCheckBoxItem key={column.id} className='capitalize' checked={column.getVisible()} onCheckedChange={(value: boolean) =>{
-      column.toggleVisibility(!!value);
-    }}>
-      {column.id}
-    </DropdownMenuCheckBoxItem>
-  )
-})}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-    </div>
+      <div className="flex justify-between items-center py-4">
+        <Input
+          className="max-w-sm"
+          placeholder="Filter by National Id"
+          value={
+            (table.getColumn("nationalId")?.getFilterValue() as string) || ""
+          }
+          onChange={(e) => {
+            table.getColumn("nationalId")?.setFilterValue(e.target.value);
+          }}
+        />
+
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value: boolean) => {
+                        column.toggleVisibility(!!value);
+                      }}
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -124,8 +158,18 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex justify-end gap-3 py-2.5">
-        <button className='p-2 text-sm rounded border' onClick={() => table.previousPage()}>Previous</button>
-        <button className='p-2 text-sm rounded border' onClick={() => table.nextPage()}>Next</button>
+        <button
+          className="p-2 text-sm rounded border"
+          onClick={() => table.previousPage()}
+        >
+          Previous
+        </button>
+        <button
+          className="p-2 text-sm rounded border"
+          onClick={() => table.nextPage()}
+        >
+          Next
+        </button>
       </div>
     </>
   );

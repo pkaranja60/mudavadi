@@ -1,13 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { DataTable } from "@/components/data-table";
-import { columns } from "./components/columns";
-import VehicleForm from "./components/vehicle-form";
+import DriverForm from "../components/driver-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function VehicleListPage() {
+export default function CreateDriverPage() {
   const pathname = usePathname();
   return (
     <>
@@ -17,14 +15,12 @@ export default function VehicleListPage() {
             <h1>{pathname.slice(1)}</h1>
           </div>
 
-          <Link href="/dashboard/vehicles/create_vehicle">
-            <Button className="bg-green-700 hover:bg-green-600 capitalize">
-              Create new vehicle
-            </Button>
+          <Link href="/dashboard/vehicles">
+          <Button className="bg-[#fdb255] hover:bg-slate-400 capitalize ">View drivers list</Button>
           </Link>
         </div>
 
-        {/* <DataTable columns={columns} data={} /> */}
+        <DriverForm />
       </main>
     </>
   );
