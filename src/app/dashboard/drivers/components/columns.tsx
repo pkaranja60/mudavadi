@@ -1,14 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { DriverData } from "@/schema";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DriverData } from "@/schema";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
@@ -23,6 +24,7 @@ export const columns: ColumnDef<DriverData>[] = [
       return (
         <Button
           variant="ghost"
+          className="text-left p-0.5"
           onClick={() => {
             column.toggleSorting(column.getIsSorted() === "asc");
           }}
@@ -63,8 +65,6 @@ export const columns: ColumnDef<DriverData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const driver = row.original;
-      const driverId = driver.nationalId;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -75,13 +75,7 @@ export const columns: ColumnDef<DriverData>[] = [
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                navigator.clipboard.writeText(driverId.toString());
-              }}
-            >
-              delete
-            </DropdownMenuItem>
+            <DropdownMenuItem>delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

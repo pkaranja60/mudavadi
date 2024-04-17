@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { DataTable } from "@/components/data-table";
 import { columns } from "./components/columns";
-import DriverForm from "./components/driver-form";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDrivers } from "@/backend/ApiConfig";
 import { Button } from "@/components/ui/button";
