@@ -161,12 +161,14 @@ export function DataTable<TData, TValue>({
         <button
           className="p-2 text-sm rounded border"
           onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           Previous
         </button>
         <button
           className="p-2 text-sm rounded border"
           onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Next
         </button>
