@@ -33,6 +33,8 @@ import {
 import { z } from "zod";
 import { toast } from "sonner";
 import { createNewDriver } from "@/backend/ApiConfig";
+import Image from "next/image";
+import DriverImageUpload from "./driverImageUpload";
 
 export default function DriverForm() {
   const form = useForm<z.infer<typeof DriverSchema>>({
@@ -72,77 +74,89 @@ export default function DriverForm() {
   };
 
   return (
-    <Card className="p-3.5">
-      <div className="text-center text-lg font-bold py-2">Add New Driver</div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
-          <div className="flex flex-row gap-3 items-center">
-            <div className="w-1/2">
+    <div className="p-5">
+      <CardHeader className="h-16 text-center text-2xl font-bold py-2">
+        Add New Driver
+      </CardHeader>
+
+      <div className="flex gap-2">
+        <DriverImageUpload />
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-2 flex-1"
+          >
+            <div className="flex flex-row gap-3 items-center">
+              <div className="w-1/2">
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="text" placeholder="Last Name" />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-1/2">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="First Name"
+                        />
+                      </FormControl>
+                      <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div>
               <FormField
                 control={form.control}
-                name="lastName"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" placeholder="Last Name" />
+                      <Input {...field} type="text" placeholder="2547xxxxxxx" />
                     </FormControl>
                     <FormMessage {...field} />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="w-1/2">
+
+            <div>
               <FormField
                 control={form.control}
-                name="firstName"
+                name="nationalId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>National ID</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" placeholder="First Name" />
+                      <Input {...field} type="text" placeholder="5678xxxx" />
                     </FormControl>
                     <FormMessage {...field} />
                   </FormItem>
                 )}
               />
             </div>
-          </div>
 
-          <div>
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" placeholder="2547xxxxxxx" />
-                  </FormControl>
-                  <FormMessage {...field} />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div>
-            <FormField
-              control={form.control}
-              name="nationalId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>National ID</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" placeholder="5678xxxx" />
-                  </FormControl>
-                  <FormMessage {...field} />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex flex-row gap-3 items-center">
-            <div className="w-1/2">
+            <div>
               <FormField
                 control={form.control}
                 name="licenseNumber"
@@ -158,7 +172,7 @@ export default function DriverForm() {
               />
             </div>
 
-            <div className="w-1/2">
+            <div>
               <FormField
                 control={form.control}
                 name="licenseExpiration"
@@ -192,49 +206,50 @@ export default function DriverForm() {
                 )}
               />
             </div>
-          </div>
 
-          <div>
-            <FormField
-              control={form.control}
-              name="driverStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Driver Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Driver Status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="active">active</SelectItem>
-                      <SelectItem value="suspended">suspended</SelectItem>
-                      <SelectItem value="inactive">inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage {...field} />
-                  <FormDescription className="text-xs">
-                    Please ensure the vehicle type is correct. Default option is{" "}
-                    <span className="text-red-300  font-medium">
-                      {field.value}
-                    </span>
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
-          </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="driverStatus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Driver Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Driver Status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="active">active</SelectItem>
+                        <SelectItem value="suspended">suspended</SelectItem>
+                        <SelectItem value="inactive">inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage {...field} />
+                    <FormDescription className="text-xs">
+                      Please ensure the vehicle type is correct. Default option
+                      is{" "}
+                      <span className="text-red-300  font-medium">
+                        {field.value}
+                      </span>
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div>
-            <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </Card>
+            <div>
+              <Button className="w-full h-14 bg-[#fdb255] hover:bg-slate-400">
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
