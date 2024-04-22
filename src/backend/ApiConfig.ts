@@ -65,6 +65,7 @@ const createNewDriver = async (formData: DriverData) => {
           licenseNumber: $licenseNumber
           licenseExpiration: $licenseExpiration
           driverStatus: $driverStatus
+          
         }
       ) {
         id
@@ -128,3 +129,5 @@ const createNewVehicle = async (formData: VehicleData) => {
 };
 
 export { getAllDrivers, createNewDriver, createNewVehicle };
+
+
