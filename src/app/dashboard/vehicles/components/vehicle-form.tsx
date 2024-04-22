@@ -70,7 +70,7 @@ export default function VehicleForm() {
   };
 
   return (
-    <Card className="p-3 lg:p-5 text-base lg:text-lg ">
+    <div className="p-5">
       <div className="text-center font-bold py-2">
         Add New Vehicle
       </div>
@@ -204,6 +204,6 @@ export default function VehicleForm() {
           </div>
         </form>
       </Form>
-    </Card>
+    </div>
   );
 }
