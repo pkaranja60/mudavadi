@@ -6,10 +6,16 @@ import { columns } from "./components/columns";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDrivers } from "@/backend/ApiConfig";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Plus } from "lucide-react";
+import Modal from "@/components/modal";
+import { useState } from "react";
+import DriverForm from "./components/driver-form";
+import Loader from "@/components/loader";
 
 export default function DriverListPage() {
   const pathname = usePathname();
+  const [showModal, setShowModal] = useState(false);
+
   const {
     data: drivers,
     isLoading,
@@ -21,27 +27,34 @@ export default function DriverListPage() {
 
   return (
     <>
-      <main className="w-full h-full px-14">
-        <div className="h-28 flex items-center justify-between">
+      <main className="w-full px-14">
+        <div className="h-24 flex items-center justify-between">
           <div className="text-2xl font-bold capitalize">
             <h1>{pathname.slice(1)}</h1>
           </div>
 
-          <Link href="/dashboard/drivers/create_driver">
-            <Button className="bg-green-700 hover:bg-green-600 capitalize">Create new driver</Button>
-          </Link>
+          <Button
+            className="bg-green-700 hover:bg-green-600 capitalize gap-2"
+            onClick={() => setShowModal(true)}
+          >
+            <Plus />
+            Create new driver
+          </Button>
         </div>
 
         <div>
           {isLoading ? (
-            "Loading..."
+            <Loader loading={isLoading} />
           ) : (
             <div>
-              <DataTable columns={columns} data={drivers} />
+              <DataTable columns={columns} data={drivers ?? []} />
             </div>
           )}
         </div>
       </main>
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <DriverForm />
+      </Modal>
     </>
   );
 }
