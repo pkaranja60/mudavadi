@@ -9,29 +9,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DriverData } from "@/schema";
-
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
 
 export const columns: ColumnDef<DriverData>[] = [
   {
     accessorKey: "nationalId",
     header: "National ID",
+    enableHiding: false,
   },
   {
     accessorKey: "lastName",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="text-left p-0.5"
-          onClick={() => {
-            column.toggleSorting(column.getIsSorted() === "asc");
-          }}
-        >
+        <div className="flex items-center gap-1">
           Last Name
-          <ArrowUpDown className="w-4 h-4 ml-3" />
-        </Button>
+          <Button
+            variant="ghost"
+            className="px-1.5"
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === "asc");
+            }}
+          >
+            <ArrowUpDown className="w-5 h-5" />
+          </Button>
+        </div>
       );
     },
   },
@@ -64,18 +66,26 @@ export const columns: ColumnDef<DriverData>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    header: "Management",
+    enableHiding: false,
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="w-8 h-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem>delete</DropdownMenuItem>
+            <DropdownMenuItem className="flex justify-between">
+              Update
+              <SquarePen className="w-4 h-4 text-blue-500" />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex justify-between">
+              Delete
+              <Trash2 className="w-4 h-4 text-red-500" />
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
