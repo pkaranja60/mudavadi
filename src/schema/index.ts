@@ -4,7 +4,7 @@ const getCurrentYear = () => new Date().getFullYear();
 
 const phoneNumberValidation = z
   .string()
-  .regex(/^254\d{9}$/, "Must start with 254 and be max 12 digits");
+  .regex(/^0\d{9}$/, "Must be max 10 digits");
 
 export const DriverSchema = z.object({
   firstName: z.string().min(1, {
