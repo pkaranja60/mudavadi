@@ -9,7 +9,7 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { Card, CardHeader } from "@/components/ui/card";
+import { CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,8 +33,8 @@ import {
 import { z } from "zod";
 import { toast } from "sonner";
 import { createNewDriver } from "@/backend/ApiConfig";
-import Image from "next/image";
 import DriverImageUpload from "./driverImageUpload";
+import { useState } from "react";
 
 export default function DriverForm() {
   const form = useForm<z.infer<typeof DriverSchema>>({
@@ -50,9 +50,23 @@ export default function DriverForm() {
     },
   });
 
+  const [imageData, setImageData] = useState<string | null>(null);
+
+  // const handleImageUpload = (image: string | null) => {
+  //   setImageData(image);
+  // };
+
   const onSubmit: SubmitHandler<DriverData> = async (formData) => {
     try {
-      const result = await createNewDriver(formData);
+      let result;
+      if (imageData) {
+        // imageData is guaranteed to be a string here
+        result = await createNewDriver(formData);
+      } else {
+        // Handle the case when there is no image
+        result = await createNewDriver(formData);
+        // Or possibly only send formData if the image is not mandatory
+      }
 
       console.log(result);
       if (result) {
@@ -80,7 +94,7 @@ export default function DriverForm() {
       </CardHeader>
 
       <div className="flex gap-2">
-        <DriverImageUpload />
+        {/* <DriverImageUpload onImageUpload={handleImageUpload} /> */}
 
         <Form {...form}>
           <form
@@ -132,7 +146,7 @@ export default function DriverForm() {
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                      <Input {...field} type="text" placeholder="2547xxxxxxx" />
+                      <Input {...field} type="text" placeholder="07xxxxxxx" />
                     </FormControl>
                     <FormMessage {...field} />
                   </FormItem>
