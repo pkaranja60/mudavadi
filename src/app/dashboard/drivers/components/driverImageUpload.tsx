@@ -1,7 +1,13 @@
 import Image from "next/image";
 import { useState, ChangeEvent } from "react";
 
-export default function DriverImageUpload() {
+interface DriverImageUploadProps {
+  onImageUpload: (imageData: string | null) => void; // Define the type of onImageUpload
+}
+
+export default function DriverImageUpload({
+  onImageUpload,
+}: DriverImageUploadProps) {
   const [image, setImage] = useState<string | null>(null);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -11,14 +17,27 @@ export default function DriverImageUpload() {
 
       reader.onloadend = () => {
         console.log("File read completed, result:", reader.result);
-        setImage(reader.result as string);
+        if (typeof reader.result === "string") {
+          setImage(reader.result);
+          onImageUpload(reader.result);
+        } else {
+          // Handle cases where reader.result is not a string
+          setImage(null);
+          onImageUpload(null);
+        }
       };
 
       reader.onerror = (error) => {
         console.error("Error reading file:", error);
+        setImage(null);
+        onImageUpload(null);
       };
 
       reader.readAsDataURL(file);
+    } else {
+      // Handle case when no file is selected or the input is cleared
+      setImage(null);
+      onImageUpload(null); // Notify parent component that no image is uploaded
     }
   };
 
