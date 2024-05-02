@@ -6,6 +6,8 @@ import { DriverData, VehicleData } from "@/schema";
 
 const hygraph = new GraphQLClient(config.hygraphUrl);
 
+
+
 const getAllDrivers = async () => {
   const queryGetDrivers = gql`
     query Drivers {
@@ -36,6 +38,33 @@ const getAllDrivers = async () => {
   }
 };
 
+const getAllVehicles = async () => {
+  const queryGetVehicles = gql`
+    query vehicles {
+      vehicles {
+        id
+        vehicleClass
+    vehicleReg
+    vehicleStatus
+    insuranceExpiration
+      }
+    }
+  `;
+
+  try {
+    const { vehicles } = await hygraph.request<{ vehicles: VehicleData[] }>(
+      queryGetVehicles
+    );
+    return vehicles;
+  } catch (error:any) {
+    console.error("Error fetching drivers:", error);
+    toast.error("Error fetching drivers: " + error.message, {
+      duration: 5500,
+    });
+    return []; // Return empty array or handle error as needed
+  }
+};
+
 const createNewDriver = async (formData: DriverData) => {
     const variables: Variables = {
         lastName: formData.lastName,
@@ -45,6 +74,7 @@ const createNewDriver = async (formData: DriverData) => {
         licenseNumber: formData.licenseNumber,
         licenseExpiration: formData.licenseExpiration,
         driverStatus: formData.driverStatus,
+
       };
   const mutationNewDriver = gql`
     mutation CreateDriver(
@@ -55,6 +85,7 @@ const createNewDriver = async (formData: DriverData) => {
       $licenseNumber: String!
       $licenseExpiration: Date!
       $driverStatus: String!
+
     ) {
       createDriver(
         data: {
@@ -65,7 +96,6 @@ const createNewDriver = async (formData: DriverData) => {
           licenseNumber: $licenseNumber
           licenseExpiration: $licenseExpiration
           driverStatus: $driverStatus
-          
         }
       ) {
         id
@@ -128,6 +158,6 @@ const createNewVehicle = async (formData: VehicleData) => {
   }
 };
 
-export { getAllDrivers, createNewDriver, createNewVehicle };
+export { getAllDrivers, getAllVehicles ,createNewDriver, createNewVehicle };
 
 
