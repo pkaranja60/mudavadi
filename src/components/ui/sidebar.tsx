@@ -3,7 +3,7 @@
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "./button";
-import { BusFront, ContactRound, LayoutDashboard } from "lucide-react";
+import { BusFront, ContactRound, LayoutDashboard, CalendarCheck2  } from "lucide-react";
 import Link from "next/link";
 import NavLinks from "../navLinks";
 
@@ -11,6 +11,7 @@ const links = [
   { url: "/dashboard", title: "Dashboard", icon: LayoutDashboard },
   { url: "/dashboard/drivers", title: "Drivers", icon: ContactRound },
   { url: "/dashboard/vehicles", title: "Vehicles", icon: BusFront },
+  { url: "/dashboard/schedule", title: "Schedule", icon: CalendarCheck2 },
 ];
 
 const containerVariants = {
