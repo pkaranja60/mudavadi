@@ -49,10 +49,6 @@ export const columns: ColumnDef<VehicleData>[] = [
               Update
               <SquarePen className="w-4 h-4 text-blue-500" />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex justify-between">
-              Delete
-              <Trash2 className="w-4 h-4 text-red-500" />
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
