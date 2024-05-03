@@ -11,6 +11,7 @@ import Modal from "@/components/modal";
 import { useState } from "react";
 import DriverForm from "./components/driver-form";
 import Loader from "@/components/loader";
+import FormT from "./components/form";
 
 export default function DriverListPage() {
   const pathname = usePathname();
@@ -53,7 +54,9 @@ export default function DriverListPage() {
         </div>
       </main>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <DriverForm />
+        {/* <DriverForm /> */}
+
+        <FormT />
       </Modal>
     </>
   );
