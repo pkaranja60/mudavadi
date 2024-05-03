@@ -62,11 +62,37 @@ export const columns: ColumnDef<DriverData>[] = [
   },
   {
     accessorKey: "driverStatus",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center gap-1">
+        Status
+          <Button
+            variant="ghost"
+            className="px-1.5"
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === "asc");
+            }}
+          >
+            <ArrowUpDown className="w-5 h-5" />
+          </Button>
+        </div>
+      );
+    },
+  },
+  {
+    id: "schedule",
+    header: "Schedule",
+    enableHiding: false,
+    cell: () => {
+      return (
+        <Button variant="outline">
+        schedule
+        </Button>
+      );
+    },
   },
   {
     id: "actions",
-    header: "Management",
     enableHiding: false,
     cell: () => {
       return (
