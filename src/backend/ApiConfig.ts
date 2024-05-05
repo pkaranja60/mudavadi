@@ -2,10 +2,73 @@ import { GraphQLClient, Variables } from "graphql-request";
 import config from "@/backend/config";
 import { gql } from "graphql-request";
 import { toast } from "sonner";
-import { DriverData, DriverDataCopy, VehicleData } from "@/schema";
+import { DriverData, VehicleData } from "@/schema";
 
 const hygraph = new GraphQLClient(config.hygraphUrl);
 
+// CREATE DRIVER AND VEHICLE DATA
+const createNewDriverData = async (formData: DriverData) => {
+  const variables: Variables = {
+    lastName: formData.lastName,
+    firstName: formData.firstName,
+    phoneNumber: formData.phoneNumber,
+    nationalId: formData.nationalId,
+    licenseNumber: formData.licenseNumber,
+    licenseExpiration: formData.licenseExpiration,
+    driverStatus: formData.driverStatus,
+    vehicleReg: formData.vehicleReg,
+    insuranceExpiration: formData.insuranceExpiration,
+    vehicleClass: formData.vehicleClass,
+  };
+  const mutationNewDriverData = gql`
+    mutation CreateDriverData(
+      $lastName: String!
+      $firstName: String!
+      $phoneNumber: String!
+      $nationalId: String!
+      $licenseNumber: String!
+      $licenseExpiration: Date!
+      $driverStatus: String!
+      $vehicleReg: String!
+      $insuranceExpiration: Date!
+      $vehicleClass: String!
+    ) {
+      createDriver(
+        data: {
+          lastName: $lastName
+          firstName: $firstName
+          phoneNumber: $phoneNumber
+          nationalId: $nationalId
+          licenseNumber: $licenseNumber
+          licenseExpiration: $licenseExpiration
+          driverStatus: $driverStatus
+          vehicle: {
+            create: {
+              vehicleReg: $vehicleReg
+              insuranceExpiration: $insuranceExpiration
+              vehicleClass: $vehicleClass
+            }
+          }
+        }
+      ) {
+        id
+      }
+    }
+  `;
+
+  try {
+    const result = await hygraph.request(mutationNewDriverData, variables);
+    return result;
+  } catch (error: any) {
+    console.error("Error creating driver:", error);
+    toast.error("Error creating drivers: " + error.message, {
+      duration: 5500,
+    });
+    return []; // Return empty array or handle error as needed
+  }
+};
+
+// GET ALL DRIVERS
 const getAllDrivers = async () => {
   const queryGetDrivers = gql`
     query Drivers {
@@ -27,25 +90,31 @@ const getAllDrivers = async () => {
       queryGetDrivers
     );
     return drivers;
-  } catch (error:any) {
-    console.error("Error fetching drivers:", error);
-    toast.error("Error fetching drivers: " + error.message, {
+  } catch (error: any) {
+    console.error("Error fetching drivers:", error.message);
+    toast.error("Error fetching drivers" , {
       duration: 5500,
     });
     return []; // Return empty array or handle error as needed
   }
 };
 
+// GET ALL VEHICLES
 const getAllVehicles = async () => {
   const queryGetVehicles = gql`
     query vehicles {
       vehicles {
-        id
-        vehicleClass
-        vehicleReg
-        vehicleStatus
-        insuranceExpiration
-      }
+    id
+    vehicleReg
+    insuranceExpiration
+    vehicleClass
+    driver {
+      lastName
+      firstName
+      driverStatus
+      nationalId
+    }
+  }
     }
   `;
 
@@ -55,169 +124,18 @@ const getAllVehicles = async () => {
     );
     return vehicles;
   } catch (error: any) {
-    console.error("Error fetching drivers:", error);
-    toast.error("Error fetching drivers: " + error.message, {
+    console.error("Error fetching drivers:", error.message);
+    toast.error("Error fetching vehicles" , {
       duration: 5500,
     });
     return []; // Return empty array or handle error as needed
   }
 };
 
-const createNewDriver = async (formData: DriverData) => {
-  const variables: Variables = {
-    lastName: formData.lastName,
-    firstName: formData.firstName,
-    phoneNumber: formData.phoneNumber,
-    nationalId: formData.nationalId,
-    licenseNumber: formData.licenseNumber,
-    licenseExpiration: formData.licenseExpiration,
-    driverStatus: formData.driverStatus,
-  };
-  const mutationNewDriver = gql`
-    mutation CreateDriver(
-      $lastName: String!
-      $firstName: String!
-      $phoneNumber: String!
-      $nationalId: String!
-      $licenseNumber: String!
-      $licenseExpiration: Date!
-      $driverStatus: String!
-    ) {
-      createDriver(
-        data: {
-          lastName: $lastName
-          firstName: $firstName
-          phoneNumber: $phoneNumber
-          nationalId: $nationalId
-          licenseNumber: $licenseNumber
-          licenseExpiration: $licenseExpiration
-          driverStatus: $driverStatus
-        }
-      ) {
-        id
-      }
-    }
-  `;
 
-  try {
-    const result = await hygraph.request(mutationNewDriver, variables);
-    return result;
-  } catch (error) {
-    console.error("Error creating driver:", error);
-    toast.error("Error creating drivers: " + error.message, {
-      duration: 5500,
-    });
-    return []; // Return empty array or handle error as needed
-  }
-};
-
-const createNewVehicle = async (formData: VehicleData) => {
-  const variables: Variables = {
-    vehicleReg: formData.vehicleReg,
-    insuranceExpiration: formData.insuranceExpiration,
-    vehicleStatus: formData.vehicleStatus,
-    vehicleClass: formData.vehicleClass,
-  };
-  const mutationNewVehicle = gql`
-    mutation CreateVehicle(
-      $vehicleReg: String!
-      $insuranceExpiration: Date!
-      $vehicleStatus: String!
-      $vehicleClass: String!
-    ) {
-      createVehicle(
-        data: {
-          vehicleReg: $vehicleReg
-          insuranceExpiration: $insuranceExpiration
-          vehicleStatus: $vehicleStatus
-          vehicleClass: $vehicleClass
-        }
-      ) {
-        id
-      }
-    }
-  `;
-
-  try {
-    const result = await hygraph.request(mutationNewVehicle, variables);
-    return result;
-  } catch (error) {
-    console.error("Error creating driver:", error);
-    toast.error("Error creating drivers: " + error.message, {
-      duration: 5500,
-    });
-    return []; // Return empty array or handle error as needed
-  }
-};
-
-const createNewDriverVehicle = async (formData: DriverDataCopy) => {
-  const variables: Variables = {
-    lastName: formData.lastName,
-    firstName: formData.firstName,
-    phoneNumber: formData.phoneNumber,
-    nationalId: formData.nationalId,
-    licenseNumber: formData.licenseNumber,
-    licenseExpiration: formData.licenseExpiration,
-    driverStatus: formData.driverStatus,
-    vehicleReg: formData.vehicleReg,
-    insuranceExpiration: formData.insuranceExpiration,
-    vehicleStatus: formData.vehicleStatus,
-    vehicleClass: formData.vehicleClass,
-  };
-  const mutationNewDriverVehicle = gql`
-    mutation CreateDriverVehicle(
-      $lastName: String!
-      $firstName: String!
-      $phoneNumber: String!
-      $nationalId: String!
-      $licenseNumber: String!
-      $licenseExpiration: Date!
-      $driverStatus: String!
-      $vehicleReg: String!
-      $insuranceExpiration: Date!
-      $vehicleStatus: String!
-      $vehicleClass: String!
-    ) {
-      createDriverCopy(
-        data: {
-          lastName: $lastName
-          firstName: $firstName
-          phoneNumber: $phoneNumber
-          nationalId: $nationalId
-          licenseNumber: $licenseNumber
-          licenseExpiration: $licenseExpiration
-          driverStatus: $driverStatus
-          vehicleCopy: {
-            create: {
-              vehicleReg: $vehicleReg
-              insuranceExpiration: $insuranceExpiration
-              vehicleStatus: $vehicleStatus
-              vehicleClass: $vehicleClass
-            }
-          }
-        }
-      ) {
-        id
-      }
-    }
-  `;
-
-  try {
-    const result = await hygraph.request(mutationNewDriverVehicle, variables);
-    return result;
-  } catch (error: any) {
-    console.error("Error creating driver:", error);
-    toast.error("Error creating drivers: " + error.message, {
-      duration: 5500,
-    });
-    return []; // Return empty array or handle error as needed
-  }
-};
 
 export {
   getAllDrivers,
   getAllVehicles,
-  createNewDriver,
-  createNewVehicle,
-  createNewDriverVehicle,
+  createNewDriverData,
 };

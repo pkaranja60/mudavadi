@@ -78,6 +78,43 @@ export const columns: ColumnDef<DriverData>[] = [
         </div>
       );
     },
+    cell: ({ row }) => {
+      const { driverStatus } = row.original;
+
+      // Define the style based on the driverStatus value
+      let style = {};
+      switch (driverStatus) {
+        case "active":
+          style = {
+            backgroundColor: "green",
+            color: "white",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        case "suspended":
+          style = {
+            backgroundColor: "yellow",
+            color: "black",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        case "inactive":
+          style = {
+            backgroundColor: "red",
+            color: "white",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        default:
+          style = { padding: "5px" }; // Default style if none of the cases match
+      }
+
+      // Return the cell content with the appropriate style
+      return <span style={style}>{driverStatus}</span>;
+    },
   },
   {
     id: "schedule",

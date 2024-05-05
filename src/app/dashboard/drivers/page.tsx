@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Modal from "@/components/modal";
 import { useState } from "react";
-import DriverForm from "./components/driver-form";
 import Loader from "@/components/loader";
 import FormT from "./components/form";
 
@@ -17,11 +16,7 @@ export default function DriverListPage() {
   const pathname = usePathname();
   const [showModal, setShowModal] = useState(false);
 
-  const {
-    data: drivers,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: drivers, isLoading } = useQuery({
     queryFn: () => getAllDrivers(),
     queryKey: ["drivers"],
   });
@@ -54,8 +49,6 @@ export default function DriverListPage() {
         </div>
       </main>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        {/* <DriverForm /> */}
-
         <FormT />
       </Modal>
     </>

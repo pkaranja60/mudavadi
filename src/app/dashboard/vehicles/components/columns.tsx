@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { VehicleData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
+import { MoreHorizontal, SquarePen } from "lucide-react";
 
 export const columns: ColumnDef<VehicleData>[] = [
   {
     accessorKey: "vehicleReg",
-    header: "vehicle Registration",
+    header: "vehicle Reg",
     enableHiding: false,
   },
   {
@@ -23,13 +23,61 @@ export const columns: ColumnDef<VehicleData>[] = [
     header: "insurance Expiration",
   },
   {
-    accessorKey: "vehicleStatus",
-    header: "Status",
-  },
-
-  {
     accessorKey: "vehicleClass",
     header: "Vehicle Class",
+  },
+  {
+    id: "driver",
+    header: "Driver",
+    cell: ({ row }) => {
+      const { firstName, lastName } = row.original.driver;
+      return <span>{`${firstName} ${lastName}`}</span>;
+    },
+  },
+  {
+    accessorKey: "driver.nationalId",
+    header: "National ID",
+  },
+  {
+    header: "Driver Status",
+    id: "driver",
+    cell: ({ row }) => {
+      const { driverStatus } = row.original.driver;
+
+      // Define the style based on the driverStatus value
+      let style = {};
+      switch (driverStatus) {
+        case "active":
+          style = {
+            backgroundColor: "green",
+            color: "white",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        case "suspended":
+          style = {
+            backgroundColor: "yellow",
+            color: "black",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        case "inactive":
+          style = {
+            backgroundColor: "red",
+            color: "white",
+            padding: "5px",
+            borderRadius: "5px",
+          };
+          break;
+        default:
+          style = { padding: "5px" }; // Default style if none of the cases match
+      }
+
+      // Return the cell content with the appropriate style
+      return <span style={style}>{driverStatus}</span>;
+    },
   },
   {
     id: "actions",
