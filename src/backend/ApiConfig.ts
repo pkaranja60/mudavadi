@@ -159,7 +159,6 @@ const getActiveDriverVehicle = async ()=>{
       queryGetActiveDriverVehicle
     );
     return drivers;
-    console.log(drivers)
   }catch(error: any){
     console.error("Error fetching drivers:", error.message);
     return []; // Return empty array or handle error as needed
