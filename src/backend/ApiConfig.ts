@@ -2,7 +2,7 @@ import { GraphQLClient, Variables } from "graphql-request";
 import config from "@/backend/config";
 import { gql } from "graphql-request";
 import { toast } from "sonner";
-import { DriverData, VehicleData } from "@/schema";
+import { ActiveDriverData, DriverData, VehicleData } from "@/schema";
 
 const hygraph = new GraphQLClient(config.hygraphUrl);
 
@@ -18,6 +18,7 @@ const createNewDriverData = async (formData: DriverData) => {
     driverStatus: formData.driverStatus,
     vehicleReg: formData.vehicleReg,
     insuranceExpiration: formData.insuranceExpiration,
+    vehicleStatus: formData.vehicleStatus,
     vehicleClass: formData.vehicleClass,
   };
   const mutationNewDriverData = gql`
@@ -31,6 +32,7 @@ const createNewDriverData = async (formData: DriverData) => {
       $driverStatus: String!
       $vehicleReg: String!
       $insuranceExpiration: Date!
+      $vehicleStatus: String!
       $vehicleClass: String!
     ) {
       createDriver(
@@ -46,6 +48,7 @@ const createNewDriverData = async (formData: DriverData) => {
             create: {
               vehicleReg: $vehicleReg
               insuranceExpiration: $insuranceExpiration
+              vehicleStatus: $vehicleStatus
               vehicleClass: $vehicleClass
             }
           }
@@ -107,11 +110,11 @@ const getAllVehicles = async () => {
     id
     vehicleReg
     insuranceExpiration
+    vehicleStatus
     vehicleClass
     driver {
       lastName
       firstName
-      driverStatus
       nationalId
     }
   }
@@ -132,10 +135,42 @@ const getAllVehicles = async () => {
   }
 };
 
+// GET ACTIVE DRIVERS AND VEHICLE
+const getActiveDriverVehicle = async ()=>{
+  const queryGetActiveDriverVehicle = gql`
+  query activeDriverVehicle {
+  drivers(
+    where: {driverStatus: "active", AND: {vehicle: {vehicleStatus: "active"}}}
+  ) {
+    id
+    lastName
+    firstName
+    licenseNumber
+    vehicle {
+      id
+      vehicleReg
+      vehicleClass
+    }
+  }
+}
+  `;
+  try{
+    const { drivers } = await hygraph.request<{ drivers: ActiveDriverData[] }>(
+      queryGetActiveDriverVehicle
+    );
+    return drivers;
+    console.log(drivers)
+  }catch(error: any){
+    console.error("Error fetching drivers:", error.message);
+    return []; // Return empty array or handle error as needed
+  }
+}
+
 
 
 export {
+  createNewDriverData,
   getAllDrivers,
   getAllVehicles,
-  createNewDriverData,
+  getActiveDriverVehicle,
 };

@@ -15,23 +15,24 @@ export default function VehicleListPage() {
     queryKey: ["vehicles"],
   });
   return (
-    <main className="w-full px-14">
-      <div className="h-28 flex items-center justify-between">
-        <div className="text-2xl font-bold capitalize">
-          <h1>{pathname.slice(1)}</h1>
+    <>
+      <main className="w-full px-14">
+        <div className="h-28 flex items-center justify-between">
+          <div className="text-2xl font-bold capitalize">
+            <h1>{pathname.slice(1)}</h1>
+          </div>
         </div>
 
-      </div>
-
-      <div>
-        {isLoading ? (
-          <Loader loading={isLoading} />
-        ) : (
-          <div>
-            <DataTable columns={columns} data={vehicles ?? []} />
-          </div>
-        )}
-      </div>
-    </main>
+        <div>
+          {isLoading ? (
+            <Loader loading={isLoading} />
+          ) : (
+            <div>
+              <DataTable columns={columns} data={vehicles ?? []} />
+            </div>
+          )}
+        </div>
+      </main>
+    </>
   );
 }

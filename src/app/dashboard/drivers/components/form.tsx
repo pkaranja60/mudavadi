@@ -51,6 +51,7 @@ export default function FormT() {
       driverStatus: "active",
       vehicleReg: "",
       insuranceExpiration: new Date(),
+      vehicleStatus: "active",
       vehicleClass: "I",
     },
   });
@@ -298,6 +299,39 @@ export default function FormT() {
                         </PopoverContent>
                       </Popover>
                       <FormMessage {...field} />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="vehicleStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Vehicle Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={field.value} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="active">active</SelectItem>
+                          <SelectItem value="inactive">inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage {...field} />
+                      <FormDescription className="text-xs">
+                        Select Vehicle type. Default option is{" "}
+                        <span className="text-red-300  font-medium">
+                          {field.value}
+                        </span>
+                      </FormDescription>
                     </FormItem>
                   )}
                 />

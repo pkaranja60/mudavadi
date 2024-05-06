@@ -30,7 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -40,9 +39,10 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [globalFilter, setGlobalFilter] = React.useState("");
+  // const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  //   []
+  // );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -58,12 +58,14 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    // onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
     state: {
-      columnFilters,
+      globalFilter,
+      // columnFilters,
       columnVisibility,
       sorting,
       pagination,
@@ -75,13 +77,9 @@ export function DataTable<TData, TValue>({
       <div className="flex justify-between items-center py-4">
         <Input
           className="max-w-sm"
-          placeholder="Filter by National Id"
-          value={
-            (table.getColumn("nationalId")?.getFilterValue() as string) || ""
-          }
-          onChange={(e) => {
-            table.getColumn("nationalId")?.setFilterValue(e.target.value);
-          }}
+          placeholder="Filter all columns"
+          value={globalFilter || ""}
+          onChange={(e) => setGlobalFilter(String(e.target.value))}
         />
 
         <div>
@@ -120,7 +118,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="text-center">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -141,7 +139,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

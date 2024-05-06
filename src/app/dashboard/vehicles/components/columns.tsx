@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { VehicleData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, SquarePen } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
 
 export const columns: ColumnDef<VehicleData>[] = [
   {
@@ -20,7 +20,29 @@ export const columns: ColumnDef<VehicleData>[] = [
   },
   {
     accessorKey: "insuranceExpiration",
-    header: "insurance Expiration",
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-center gap-1">
+          Insurance Expiration
+          <Button
+            variant="ghost"
+            className="px-1.5"
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === "asc");
+            }}
+          >
+            <ArrowUpDown className="w-5 h-5" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const insuranceExpiration = row.getValue("insuranceExpiration");
+      const formatted = new Date(
+        insuranceExpiration as string
+      ).toLocaleDateString();
+      return <div>{formatted}</div>;
+    },
   },
   {
     accessorKey: "vehicleClass",
@@ -28,37 +50,33 @@ export const columns: ColumnDef<VehicleData>[] = [
   },
   {
     id: "driver",
-    header: "Driver",
+    header: "Driver Name",
     cell: ({ row }) => {
       const { firstName, lastName } = row.original.driver;
       return <span>{`${firstName} ${lastName}`}</span>;
     },
   },
   {
-    accessorKey: "driver.nationalId",
+    id: "national Id",
     header: "National ID",
+    cell: ({ row }) => {
+      const { nationalId } = row.original.driver;
+      return <span>{nationalId}</span>;
+    },
   },
   {
-    header: "Driver Status",
-    id: "driver",
+    header: "Status",
+    id: "vehicleStatus",
     cell: ({ row }) => {
-      const { driverStatus } = row.original.driver;
+      const { vehicleStatus } = row.original;
 
       // Define the style based on the driverStatus value
       let style = {};
-      switch (driverStatus) {
+      switch (vehicleStatus) {
         case "active":
           style = {
             backgroundColor: "green",
             color: "white",
-            padding: "5px",
-            borderRadius: "5px",
-          };
-          break;
-        case "suspended":
-          style = {
-            backgroundColor: "yellow",
-            color: "black",
             padding: "5px",
             borderRadius: "5px",
           };
@@ -76,12 +94,11 @@ export const columns: ColumnDef<VehicleData>[] = [
       }
 
       // Return the cell content with the appropriate style
-      return <span style={style}>{driverStatus}</span>;
+      return <span style={style}>{vehicleStatus}</span>;
     },
   },
   {
     id: "actions",
-    header: "Management",
     enableHiding: false,
     cell: () => {
       return (

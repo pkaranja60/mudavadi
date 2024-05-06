@@ -22,7 +22,7 @@ export const columns: ColumnDef<DriverData>[] = [
     accessorKey: "lastName",
     header: ({ column }) => {
       return (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-center gap-1">
           Last Name
           <Button
             variant="ghost"
@@ -51,7 +51,22 @@ export const columns: ColumnDef<DriverData>[] = [
   },
   {
     accessorKey: "licenseExpiration",
-    header: "License Expiration",
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-center gap-1">
+        License Expiration
+          <Button
+            variant="ghost"
+            className="px-1.5"
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === "asc");
+            }}
+          >
+            <ArrowUpDown className="w-5 h-5" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       const licenseExpiration = row.getValue("licenseExpiration");
       const formatted = new Date(
@@ -64,7 +79,7 @@ export const columns: ColumnDef<DriverData>[] = [
     accessorKey: "driverStatus",
     header: ({ column }) => {
       return (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-center gap-1">
         Status
           <Button
             variant="ghost"
