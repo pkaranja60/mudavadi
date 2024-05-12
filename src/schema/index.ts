@@ -23,6 +23,13 @@ const ScheduleVehicleSchema = z.object({
   vehicleClass: z.string(),
 });
 
+const ColumnVehicleSchema = z.object({
+  vehicleReg: z.string(),
+  insuranceExpiration: z.date(),
+  vehicleStatus: z.string(),
+  vehicleClass: z.string(),
+});
+
 const getCurrentYear = () => new Date().getFullYear();
 
 const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
@@ -77,7 +84,6 @@ export const DriverDataSchema = z.object({
   insuranceExpiration: z.date(),
   vehicleStatus: z.string(),
   vehicleClass: z.string(),
-
 });
 
 export const VehicleDataSchema = z.object({
@@ -89,10 +95,11 @@ export const VehicleDataSchema = z.object({
 });
 
 export const ActiveDriverDataSchema = z.object({
-  id: z.string(),
+  nationalId: z.string(),
   lastName: z.string(),
   firstName: z.string(),
-  licenseNumber: z.string(),
+  phoneNumber: z.string(),
+  driverStatus: z.string(),
   vehicle: ActiveVehicleSchema,
 });
 
@@ -111,8 +118,20 @@ export const DriverScheduleSchema = z.object({
   vehicle: ScheduleVehicleSchema,
 });
 
+export const DriverColumnSchema = z.object({
+  lastName: z.string(),
+  firstName: z.string(),
+  phoneNumber: z.string(),
+  nationalId: z.string(),
+  licenseNumber: z.string(),
+  licenseExpiration: z.date(),
+  driverStatus: z.string(),
+  vehicle: ColumnVehicleSchema,
+});
+
 export type DriverData = z.infer<typeof DriverDataSchema>;
 export type VehicleData = z.infer<typeof VehicleDataSchema>;
 export type ActiveDriverData = z.infer<typeof ActiveDriverDataSchema>;
 export type ScheduleData = z.infer<typeof ScheduleDataSchema>;
 export type DriverScheduleData = z.infer<typeof DriverScheduleSchema>;
+export type DriverColumn = z.infer<typeof DriverColumnSchema>;

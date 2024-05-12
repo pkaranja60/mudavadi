@@ -1,7 +1,17 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FetchActiveVehicles } from "./fetchFunctions";
 
 export default function StatsCard() {
+  const [activeVehiclesCount, setActiveVehiclesCount] = useState<number>(0);
+
+  useEffect(() => {
+    FetchActiveVehicles().then((count) => {
+      setActiveVehiclesCount(count || 0);
+    });
+  }, []);
+
+  
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -99,8 +109,7 @@ export default function StatsCard() {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">+573</div>
-          <p className="text-xs text-muted-foreground">+201 since last hour</p>
+          <p className="text-4xl font-bold">{activeVehiclesCount}</p>
         </CardContent>
       </Card>
     </div>

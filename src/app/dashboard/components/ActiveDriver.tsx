@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { getAllDrivers } from "@/backend/ApiConfig";
+import { getActiveDriverVehicle, getAllDrivers } from "@/backend/ApiConfig";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DriverData } from "@/schema";
+import { ActiveDriverData, DriverData } from "@/schema";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function ActiveDriver() {
-  const [drivers, setDrivers] = useState<DriverData[]>([]);
+  const [drivers, setDrivers] = useState<ActiveDriverData[]>([]);
 
   useEffect(() => {
     getAllDriverList();
@@ -19,11 +22,8 @@ export default function ActiveDriver() {
 
   const getAllDriverList = async () => {
     try {
-      const allDrivers = await getAllDrivers();
-      const activeDrivers = allDrivers.filter(
-        (driver) => driver.driverStatus === "active"
-      );
-      setDrivers(activeDrivers); // Set the drivers in state
+      const allDrivers = await getActiveDriverVehicle();
+      setDrivers(allDrivers.slice(0, 10)); // Set the drivers in state
     } catch (error) {
       console.error("Error fetching drivers:", error);
       // Handle error (e.g., display toast)
@@ -34,7 +34,7 @@ export default function ActiveDriver() {
     <Card className="col-span-3">
       <CardHeader>
         <CardTitle>Active Drivers</CardTitle>
-        <CardDescription>Active routes this month.</CardDescription>
+        <CardDescription>Drivers with active vehicles.</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -64,6 +64,12 @@ export default function ActiveDriver() {
           </div>
         ))}
       </CardContent>
+
+      <CardFooter>
+        <Link href="/dashboard/drivers">
+          <Button variant="outline">More</Button>
+        </Link>
+      </CardFooter>
     </Card>
   );
 }

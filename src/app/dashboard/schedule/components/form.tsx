@@ -37,8 +37,10 @@ const getYearAhead = (years = 10) => {
 export default function ScheduleForm({
   nationalId,
   vehicleReg,
+  phoneNumber,
 }: {
   nationalId: string;
+  phoneNumber: string;
   vehicleReg: string;
 }) {
   const form = useForm<z.infer<typeof ScheduleSchema>>({
@@ -50,6 +52,31 @@ export default function ScheduleForm({
     },
   });
 
+  const sendSms = async (formData: ScheduleData) => {
+    try {
+      const response = await fetch("/api/send-sms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: phoneNumber, // This is the recipient's phone number
+          message: `Your schedule for vehicle ${vehicleReg} has been created successfully on ${formData.scheduleDate} at ${formData.startTime}.`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send SMS");
+      }
+
+      const data = await response.json();
+      console.log("SMS sent successfully:", data.message);
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      // Handle error appropriately, e.g., show error message to the user
+    }
+  };
+
   const onSubmit: SubmitHandler<ScheduleData> = async (formData) => {
     try {
       const result = await createNewSchedule(formData, nationalId, vehicleReg);
@@ -57,19 +84,24 @@ export default function ScheduleForm({
       console.log(result);
       if (result) {
         // Show toast notification for success
-        toast.success("Driver created successfully!", {
+        toast.success("Schedule created successfully!", {
           duration: 5500,
         });
-        console.log("Driver created successfully!");
+
+        console.log("Schedule created successfully!");
+
+        // Send SMS
+        await sendSms(formData);
+
         // Reset the form to its default values
         form.reset();
       } else {
-        toast.error("Failed to create driver.", {
+        toast.error("Failed to create Schedule.", {
           duration: 5500,
         });
       }
     } catch (error) {
-      console.error("Error creating driver:", error);
+      console.error("Error creating Schedule:", error);
     }
   };
 

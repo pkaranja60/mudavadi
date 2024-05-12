@@ -2,7 +2,7 @@ import { GraphQLClient, Variables } from "graphql-request";
 import config from "@/backend/config";
 import { gql } from "graphql-request";
 import { toast } from "sonner";
-import { ActiveDriverData, DriverData, DriverScheduleData, ScheduleData, VehicleData } from "@/schema";
+import { ActiveDriverData, DriverColumn, DriverData, DriverScheduleData, ScheduleData, VehicleData } from "@/schema";
 
 const hygraph = new GraphQLClient(config.hygraphUrl);
 
@@ -86,13 +86,14 @@ const getAllDrivers = async () => {
         driverStatus
         vehicle {
       vehicleReg
+      vehicleStatus
     }
       }
     }
   `;
 
   try {
-    const { drivers } = await hygraph.request<{ drivers: DriverData[] }>(
+    const { drivers } = await hygraph.request<{ drivers: DriverColumn[] }>(
       queryGetDrivers
     );
     return drivers;
@@ -145,14 +146,16 @@ const getActiveDriverVehicle = async ()=>{
   drivers(
     where: {driverStatus: "active", AND: {vehicle: {vehicleStatus: "active"}}}
   ) {
-    id
+    nationalId
     lastName
     firstName
-    licenseNumber
+    phoneNumber
+    driverStatus
     vehicle {
       id
       vehicleReg
       vehicleClass
+      
     }
   }
 }
@@ -290,6 +293,36 @@ const getAllDriversVehicles = async () => {
 };
 
 
+// DELETE SCHEDULE
+const deleteSchedule = async (
+  id: string,
+) => {
+  const variables: Variables = {
+    id: id,
+  };
+  const mutationDeleteSchedule = gql`
+    mutation deleteSchedule(
+      $id: ID!
+    ) {
+      deleteSchedule(where: {id: $id}) {
+    id
+    scheduleDate
+    startTime
+    slotNumber
+    stage
+  }
+      }
+  `;
+
+  try {
+    const result = await hygraph.request(mutationDeleteSchedule, variables);
+    return result;
+  } catch (error: any) {
+    console.error("Error creating schedule:", error);
+    return []; // Return empty array or handle error as needed
+  }
+};
+
 export {
   createNewDriverData,
   getAllDrivers,
@@ -298,4 +331,5 @@ export {
   createNewSchedule,
   getDriverSchedules,
   getAllDriversVehicles,
+  deleteSchedule,
 };

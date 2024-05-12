@@ -8,28 +8,47 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DriverData } from "@/schema";
+import { DriverColumn } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
 import { useState } from "react";
 import ScheduleForm from "../../schedule/components/form";
 import Modal from "@/components/modal";
 
-const ScheduleCell = ({ nationalId, vehicleReg }: { nationalId: string, vehicleReg: string }) => {
+const ScheduleCell = ({
+  nationalId,
+  vehicleReg,
+  vehicleStatus,
+  phoneNumber,
+}: {
+  nationalId: string;
+  phoneNumber: string;
+  vehicleReg: string;
+  vehicleStatus: string;
+}) => {
   const [showModal, setShowModal] = useState(false);
+
+  const isVehicleActive = vehicleStatus === "active";
+
   return (
     <>
-      <Button variant="outline" onClick={() => setShowModal(true)}>
-        Schedule
-      </Button>
+      {isVehicleActive && (
+        <Button variant="outline" onClick={() => setShowModal(true)}>
+          Schedule
+        </Button>
+      )}
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <ScheduleForm nationalId={nationalId} vehicleReg={vehicleReg} />
+        <ScheduleForm
+          nationalId={nationalId}
+          vehicleReg={vehicleReg}
+          phoneNumber={phoneNumber}
+        />
       </Modal>
     </>
   );
 };
 
-export const columns: ColumnDef<DriverData>[] = [
+export const columns: ColumnDef<DriverColumn>[] = [
   {
     accessorKey: "nationalId",
     header: "National ID",
@@ -154,10 +173,16 @@ export const columns: ColumnDef<DriverData>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const nationalId = row.original.nationalId;
-      const {vehicleReg} = row.original.vehicle
+      const phoneNumber = row.original.phoneNumber;
+      const { vehicleReg, vehicleStatus } = row.original.vehicle;
       return (
         <>
-          <ScheduleCell nationalId={nationalId} vehicleReg={vehicleReg} />
+          <ScheduleCell
+            nationalId={nationalId}
+            phoneNumber={phoneNumber}
+            vehicleReg={vehicleReg}
+            vehicleStatus={vehicleStatus}
+          />
         </>
       );
     },
