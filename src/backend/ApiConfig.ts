@@ -282,7 +282,7 @@ const getAllDriversVehicles = async () => {
   `;
 
   try {
-    const { drivers } = await hygraph.request<{ drivers: DriverData[] }>(
+    const { drivers } = await hygraph.request<{ drivers: DriverColumn[] }>(
       queryAllGetDriversVehicles
     );
     return drivers;

@@ -37,7 +37,7 @@ export default function ActiveDriver() {
         <CardDescription>Drivers with active vehicles.</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="h-3/4">
         {drivers.map((driver) => (
           <div
             key={driver.nationalId}
@@ -66,7 +66,7 @@ export default function ActiveDriver() {
       </CardContent>
 
       <CardFooter>
-        <Link href="/dashboard/drivers">
+        <Link href="/dashboard/drivers" className="ml-auto">
           <Button variant="outline">More</Button>
         </Link>
       </CardFooter>

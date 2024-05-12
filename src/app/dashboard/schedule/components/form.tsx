@@ -60,8 +60,8 @@ export default function ScheduleForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          phone: phoneNumber, // This is the recipient's phone number
-          message: `Your schedule for vehicle ${vehicleReg} has been created successfully on ${formData.scheduleDate} at ${formData.startTime}.`,
+          phone: +phoneNumber, // This is the recipient's phone number
+          message: `Your schedule for vehicle ${vehicleReg} ${formData.scheduleDate} at ${formData.startTime}.`,
         }),
       });
 

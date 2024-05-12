@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import twilio from "twilio";
+
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
