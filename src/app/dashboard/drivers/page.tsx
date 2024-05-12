@@ -10,7 +10,7 @@ import { Plus } from "lucide-react";
 import Modal from "@/components/modal";
 import { useState } from "react";
 import Loader from "@/components/loader";
-import FormT from "./components/form";
+import DriverForm from "./components/form";
 
 export default function DriverListPage() {
   const pathname = usePathname();
@@ -49,7 +49,7 @@ export default function DriverListPage() {
         </div>
       </main>
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <FormT />
+        <DriverForm />
       </Modal>
     </>
   );

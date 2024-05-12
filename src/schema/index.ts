@@ -12,6 +12,17 @@ const ActiveVehicleSchema = z.object({
   vehicleClass: z.string(),
 });
 
+const ScheduleDriverSchema = z.object({
+  lastName: z.string(),
+  firstName: z.string(),
+  licenseNumber: z.string(),
+});
+
+const ScheduleVehicleSchema = z.object({
+  vehicleReg: z.string(),
+  vehicleClass: z.string(),
+});
+
 const getCurrentYear = () => new Date().getFullYear();
 
 const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
@@ -39,17 +50,17 @@ export const DriverSchema = z.object({
     message: "Required",
   }),
   vehicleStatus: z.enum(["active", "inactive"]),
-  vehicleClass: z.enum(["I", "II", "III", "IV", "V"]),
+  vehicleClass: z.enum(["Matatu", "Minibus", "Bus"]),
 });
 
 export const ScheduleSchema = z.object({
-  driver: z.string().min(1, {
+  scheduleDate: z.date().min(new Date(getCurrentYear(), 0, 1), {
     message: "Required",
   }),
-  scheduleDateTime: z.date().min(new Date(getCurrentYear(), 0, 1), {
+  startTime: z.string().min(1, {
     message: "Required",
   }),
-  vehicle: z.string().min(1, {
+  slotNumber: z.string().min(1, {
     message: "Required",
   }),
 });
@@ -66,6 +77,7 @@ export const DriverDataSchema = z.object({
   insuranceExpiration: z.date(),
   vehicleStatus: z.string(),
   vehicleClass: z.string(),
+
 });
 
 export const VehicleDataSchema = z.object({
@@ -84,6 +96,23 @@ export const ActiveDriverDataSchema = z.object({
   vehicle: ActiveVehicleSchema,
 });
 
+export const ScheduleDataSchema = z.object({
+  scheduleDate: z.date(),
+  startTime: z.string(),
+  slotNumber: z.string(),
+});
+
+export const DriverScheduleSchema = z.object({
+  id: z.string(),
+  scheduleDate: z.date(),
+  startTime: z.string(),
+  slotNumber: z.string(),
+  driver: ScheduleDriverSchema,
+  vehicle: ScheduleVehicleSchema,
+});
+
 export type DriverData = z.infer<typeof DriverDataSchema>;
 export type VehicleData = z.infer<typeof VehicleDataSchema>;
 export type ActiveDriverData = z.infer<typeof ActiveDriverDataSchema>;
+export type ScheduleData = z.infer<typeof ScheduleDataSchema>;
+export type DriverScheduleData = z.infer<typeof DriverScheduleSchema>;

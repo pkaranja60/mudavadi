@@ -38,7 +38,14 @@ import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
-export default function FormT() {
+const getCurrentYear = () => new Date().getFullYear();
+
+const getYearAhead = (years = 10) => {
+  const currentYear = new Date().getFullYear();
+  return currentYear + years;
+};
+
+export default function DriverForm() {
   const form = useForm<z.infer<typeof DriverSchema>>({
     resolver: zodResolver(DriverSchema),
     defaultValues: {
@@ -52,7 +59,7 @@ export default function FormT() {
       vehicleReg: "",
       insuranceExpiration: new Date(),
       vehicleStatus: "active",
-      vehicleClass: "I",
+      vehicleClass: "Matatu",
     },
   });
 
@@ -207,6 +214,9 @@ export default function FormT() {
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
+                            captionLayout="dropdown-buttons"
+                            fromYear={getCurrentYear()}
+                            toYear={getYearAhead()}
                           />
                         </PopoverContent>
                       </Popover>
@@ -295,6 +305,9 @@ export default function FormT() {
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
+                            captionLayout="dropdown-buttons"
+                            fromYear={getCurrentYear()}
+                            toYear={getYearAhead()}
                           />
                         </PopoverContent>
                       </Popover>
@@ -354,11 +367,9 @@ export default function FormT() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="I">class I</SelectItem>
-                          <SelectItem value="II">class II</SelectItem>
-                          <SelectItem value="III">class III</SelectItem>
-                          <SelectItem value="IV">class IV</SelectItem>
-                          <SelectItem value="V">class V</SelectItem>
+                          <SelectItem value="Matatu">Matatu</SelectItem>
+                          <SelectItem value="Minibus">Minibus</SelectItem>
+                          <SelectItem value="Bus">Bus</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage {...field} />

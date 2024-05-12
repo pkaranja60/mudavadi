@@ -1,6 +1,10 @@
+import { getAllDriversVehicles } from "@/backend/ApiConfig";
+import { DriverData } from "@/schema";
 import xlsx, { IJsonSheet } from "json-as-xlsx";
 
-export function downloadToExcel() {
+export async function downloadToExcel() {
+  // Fetch drivers data
+  const drivers: DriverData[] = await getAllDriversVehicles();
 
   let columns: IJsonSheet[] = [
     {
@@ -12,11 +16,28 @@ export function downloadToExcel() {
         { label: "Phone Number", value: "phoneNumber" },
         { label: "License Number", value: "licenseNumber" },
         {
-          label: "licenseExpiration",
+          label: "License Expiration",
           value: (row: any) =>
             new Date(row.licenseExpiration).toLocaleDateString(),
         },
-        { label: "Status", value: "driverStatus" },
+        { label: "Driver Status", value: "driverStatus" },
+        {
+          label: "vehicle Registration",
+          value: (row: any) => row.vehicle.vehicleReg,
+        },
+        {
+          label: "Insurance Expiration",
+          value: (row: any) =>
+            new Date(row.vehicle.insuranceExpiration).toLocaleDateString(),
+        },
+        {
+          label: "Vehicle Type",
+          value: (row: any) => row.vehicle.vehicleClass,
+        },
+        {
+          label: "Vehicle Status",
+          value: (row: any) => row.vehicle.vehicleStatus,
+        },
       ],
       content: drivers,
     },

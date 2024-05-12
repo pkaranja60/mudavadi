@@ -46,7 +46,7 @@ export const columns: ColumnDef<VehicleData>[] = [
   },
   {
     accessorKey: "vehicleClass",
-    header: "Vehicle Class",
+    header: "Vehicle Type",
   },
   {
     id: "driver",

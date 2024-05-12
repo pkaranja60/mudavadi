@@ -2,7 +2,6 @@
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -30,6 +29,10 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { downloadToExcel } from "@/lib/xls";
+import { Sheet } from "lucide-react";
+import { usePathname } from "next/navigation";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -72,22 +75,35 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const pathname = usePathname();
+  const isDashboardDriverRoute = pathname === "/dashboard/drivers";
+
   return (
     <>
       <div className="flex justify-between items-center py-4">
-        <Input
-          className="max-w-sm"
-          placeholder="Filter all columns"
-          value={globalFilter || ""}
-          onChange={(e) => setGlobalFilter(String(e.target.value))}
-        />
+        <div className="flex gap-3">
+          <Input
+            className="max-w-sm"
+            placeholder="Filter all columns"
+            value={globalFilter || ""}
+            onChange={(e) => setGlobalFilter(String(e.target.value))}
+          />
+
+          {isDashboardDriverRoute && ( // Conditionally render button based on route
+            <Button
+              className="bg-[#fdb255] hover:bg-slate-400 gap-2"
+              onClick={() => downloadToExcel()}
+            >
+              <Sheet className="w-5 h-5" />
+              Export to Excel
+            </Button>
+          )}
+        </div>
 
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="outline" className="ml-auto">
-                Columns
-              </Button>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Columns</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {table

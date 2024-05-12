@@ -1,11 +1,22 @@
 import { Bell } from "lucide-react";
 import { Button } from "./button";
-import { UserButton } from "@clerk/nextjs";
+import { currentUser, UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await currentUser();
+
   return (
     <nav className="w-full h-[76px] px-14 flex items-center justify-between border-b-2 border-b-slate-200">
-      <div className="flex-1 ">
+      <div className="flex items-center">
+      <Image
+            src="/bts-logo.png"
+            alt="Image"
+            width="80"
+            height="80"
+          
+          />
+
         <h1 className="text-2xl text-[#444444] font-bold">BTS</h1>
       </div>
 
@@ -16,7 +27,9 @@ export default function Navbar() {
 
         <div className="flex items-center gap-6">
           <div className="text-right">
-            <h4 className="text-lg text-[#232323]">John Doe</h4>
+            <h4 className="text-lg text-[#232323]">
+              {user?.firstName} {user?.lastName}
+            </h4>
             <h5 className="text-sm text-[#aaaaaa]">Administrator</h5>
           </div>
 

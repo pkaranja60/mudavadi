@@ -11,6 +11,23 @@ import {
 import { DriverData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
+import { useState } from "react";
+import ScheduleForm from "../../schedule/components/form";
+import Modal from "@/components/modal";
+
+const ScheduleCell = ({ nationalId, vehicleReg }: { nationalId: string, vehicleReg: string }) => {
+  const [showModal, setShowModal] = useState(false);
+  return (
+    <>
+      <Button variant="outline" onClick={() => setShowModal(true)}>
+        Schedule
+      </Button>
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <ScheduleForm nationalId={nationalId} vehicleReg={vehicleReg} />
+      </Modal>
+    </>
+  );
+};
 
 export const columns: ColumnDef<DriverData>[] = [
   {
@@ -54,7 +71,7 @@ export const columns: ColumnDef<DriverData>[] = [
     header: ({ column }) => {
       return (
         <div className="flex items-center justify-center gap-1">
-        License Expiration
+          License Expiration
           <Button
             variant="ghost"
             className="px-1.5"
@@ -80,7 +97,7 @@ export const columns: ColumnDef<DriverData>[] = [
     header: ({ column }) => {
       return (
         <div className="flex items-center justify-center gap-1">
-        Status
+          Status
           <Button
             variant="ghost"
             className="px-1.5"
@@ -135,11 +152,13 @@ export const columns: ColumnDef<DriverData>[] = [
     id: "schedule",
     header: "Schedule",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
+      const nationalId = row.original.nationalId;
+      const {vehicleReg} = row.original.vehicle
       return (
-        <Button variant="outline">
-        schedule
-        </Button>
+        <>
+          <ScheduleCell nationalId={nationalId} vehicleReg={vehicleReg} />
+        </>
       );
     },
   },
