@@ -27,10 +27,12 @@ export default function ScheduleForm({
                                          nationalId,
                                          vehicleReg,
                                          phoneNumber,
+                                           closeModal,
                                      }: {
     nationalId: string;
     phoneNumber: string;
     vehicleReg: string;
+    closeModal: () => void;
 }) {
     const form = useForm<z.infer<typeof ScheduleSchema>>({
         resolver: zodResolver(ScheduleSchema),
@@ -49,9 +51,13 @@ export default function ScheduleForm({
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    phone: +phoneNumber, // This is the recipient's phone number
-                    message: `Your schedule for vehicle ${vehicleReg} ${formData.scheduleDate} at ${formData.startTime}.`,
-                }),
+                    phone: ensurePlusSign(phoneNumber), // This is the recipient's phone number
+                    message: `Your vehicle  ${vehicleReg} is schedule for slot  ${
+             formData.slotNumber
+           } is on ${new Date(formData.scheduleDate).toLocaleDateString()} at ${
+             formData.startTime
+           }.`,
+         }),
             });
 
             if (!response.ok) {
@@ -60,11 +66,22 @@ export default function ScheduleForm({
 
             const data = await response.json();
             console.log("SMS sent successfully:", data.message);
+            toast.success("SMS sent successfully", {
+                duration: 5000,
+            });
         } catch (error) {
             console.error("Error sending SMS:", error);
             // Handle error appropriately, e.g., show error message to the user
         }
     };
+
+    function ensurePlusSign(phoneNumber: string) {
+  if (!phoneNumber.startsWith("+")) {
+    return "+" + phoneNumber;
+  } else {
+    return phoneNumber;
+  }
+}
 
     const onSubmit: SubmitHandler<ScheduleData> = async (formData) => {
         try {
@@ -76,18 +93,19 @@ export default function ScheduleForm({
             if (result) {
                 // Show toast notification for success
                 toast.success("Schedule created successfully!", {
-                    duration: 5500,
+                    duration: 5000,
                 });
 
                 console.log("Schedule created successfully!");
+
+                // Close the modal
+           closeModal();
 
                 // Send SMS
                 await sendSms(formData);
 
                 // Reset the form to its default values
                 form.reset();
-
-                //TODO:Close the modal
 
             } else {
                 toast.error("Failed to create Schedule.", {
