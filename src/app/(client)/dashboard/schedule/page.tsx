@@ -20,14 +20,16 @@ export default function ScheduleTool() {
 
   // Filter schedules based on vehicleClass
   const matatus = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "matatu"
+    (schedule) => schedule.vehicle.vehicleClass === "Matatu"
   );
   const minibuses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "minibus"
+    (schedule) => schedule.vehicle.vehicleClass === "Minibus"
   );
   const buses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "bus"
+    (schedule) => schedule.vehicle.vehicleClass === "Bus"
   );
+
+  console.log(schedules)
 
   if (isLoading) {
     return (
