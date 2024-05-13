@@ -33,6 +33,7 @@ const ColumnVehicleSchema = z.object({
 const getCurrentYear = () => new Date().getFullYear();
 
 const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
+const validateNumber  = z.string().regex(/^([1-9]|1\d|20)$/, 'Range between 1-20');
 
 export const DriverSchema = z.object({
   firstName: z.string().min(1, {
@@ -67,9 +68,7 @@ export const ScheduleSchema = z.object({
   startTime: z.string().min(1, {
     message: "Required",
   }),
-  slotNumber: z.string().min(1, {
-    message: "Required",
-  }),
+  slotNumber: validateNumber,
 });
 
 export const DriverDataSchema = z.object({
