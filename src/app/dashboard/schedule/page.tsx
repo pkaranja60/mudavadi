@@ -20,14 +20,14 @@ export default function ScheduleTool() {
   });
 
   // Filter schedules based on vehicleClass
-  const matatus = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "matatu"
+  const Matatus = schedules?.filter(
+    (schedule) => schedule.vehicle.vehicleClass === "Matatu"
   );
-  const minibuses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "minibus"
+  const Minibuses = schedules?.filter(
+    (schedule) => schedule.vehicle.vehicleClass === "Minibus"
   );
-  const buses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "bus"
+  const Buses = schedules?.filter(
+    (schedule) => schedule.vehicle.vehicleClass === "Bus"
   );
 
   if (isLoading) {
@@ -55,7 +55,7 @@ export default function ScheduleTool() {
           <h3 className="text-2xl font-semibold">Matatu</h3>
 
           {renderScheduleCards(
-            matatus,
+            Matatus,
             "w-[220px] h-[200px] p-5 flex flex-col justify-center text-center bg-gradient-to-r from-cyan-100 to-blue-100 hover:scale-105 cursor-pointer"
           )}
         </div>
@@ -63,14 +63,14 @@ export default function ScheduleTool() {
           <h3 className="text-2xl font-semibold ">Minibus</h3>
 
           {renderScheduleCards(
-            minibuses,
+            Minibuses,
             "w-[220px] h-[200px] p-5 flex flex-col justify-center text-center bg-gradient-to-r from-pink-100 to-blue-100 hover:scale-105 cursor-pointer"
           )}
         </div>
         <div>
           <h3 className="text-2xl font-semibold ">Bus</h3>
           {renderScheduleCards(
-            buses,
+            Buses,
             "w-[220px] h-[200px] p-5 flex flex-col justify-center text-center bg-gradient-to-r from-violet-100 to-blue-100 hover:scale-105 cursor-pointer"
           )}
         </div>
