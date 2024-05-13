@@ -28,6 +28,11 @@ const ScheduleCell = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
+ // Function to close the modal
+  const closeModal = () => {
+      setShowModal(false);
+  };
+
   const isVehicleActive = vehicleStatus === "active";
 
   return (
@@ -42,6 +47,7 @@ const ScheduleCell = ({
           nationalId={nationalId}
           vehicleReg={vehicleReg}
           phoneNumber={phoneNumber}
+          closeModal={closeModal}
         />
       </Modal>
     </>
