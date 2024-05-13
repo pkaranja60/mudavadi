@@ -175,7 +175,7 @@ const getActiveDriverVehicle = async ()=>{
 const createNewSchedule = async (
   formData: ScheduleData,
   nationalId: string,
-  vehicleReg: string
+  vehicleReg: string,
 ) => {
   const variables: Variables = {
     scheduleDate: formData.scheduleDate,
