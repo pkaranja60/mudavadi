@@ -1,7 +1,7 @@
-import { deleteSchedule } from "@/backend/ApiConfig";
 import { Card } from "@/components/ui/card";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import {deleteSchedule} from "@/app/(backend)/graph/graph-queries";
 
 export default function renderScheduleCards(data: any, className: string) {
   if (data.length === 0) {

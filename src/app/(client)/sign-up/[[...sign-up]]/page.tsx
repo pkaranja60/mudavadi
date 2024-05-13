@@ -7,13 +7,13 @@ export default function Page() {
     <section className="bg-slate-50">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
-          <Image
-            src="/matatu.jpg"
-            alt="Image"
-            width="1920"
-            height="1080"
-            className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale absolute inset-0 opacity-80"
-          />
+        <Image
+          src="/matatu-2.jpg"
+          alt="Image"
+          width="1920"
+          height="1080"
+          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale absolute inset-0 opacity-80"
+        />
 
           <div className="hidden lg:relative lg:block lg:p-12">
             <Link className="block text-white" href="/">
