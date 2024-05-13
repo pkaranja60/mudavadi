@@ -47,13 +47,13 @@ function assignSlotNumber(vehicle: any): number {
   }
   // Increment slot count based on vehicle class
   switch (vehicle.vehicleClass) {
-    case "matatu":
+    case "Matatu":
       vehicle.slotCount = (vehicle.slotCount % 20) + 1; // Ensure slot count stays within 1-20 range
       return vehicle.slotCount;
-    case "minibus":
+    case "Minibus":
       vehicle.slotCount = (vehicle.slotCount % 20) + 1;
       return vehicle.slotCount + 20; // Offset for minivans
-    case "bus":
+    case "Bus":
       vehicle.slotCount = (vehicle.slotCount % 20) + 1;
       return vehicle.slotCount + 40; // Offset for shuttles
     default:
