@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { getActiveDriverVehicle, getAllDrivers } from "@/backend/ApiConfig";
 import {
   Card,
   CardHeader,
@@ -12,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ActiveDriverData, DriverData } from "@/schema";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {getActiveDriverVehicle} from "@/app/(backend)/graph/graph-queries";
 
 export default function ActiveDriver() {
   const [drivers, setDrivers] = useState<ActiveDriverData[]>([]);

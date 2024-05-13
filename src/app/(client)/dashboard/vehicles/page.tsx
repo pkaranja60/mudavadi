@@ -1,11 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { getAllVehicles } from "@/app/(backend)/graph/graph-queries";
 import { DataTable } from "@/components/data-table";
-import { columns } from "./components/columns";
-import { getAllVehicles } from "@/backend/ApiConfig";
 import Loader from "@/components/loader";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
+import { columns } from "./components/columns";
 
 export default function VehicleListPage() {
   const pathname = usePathname();

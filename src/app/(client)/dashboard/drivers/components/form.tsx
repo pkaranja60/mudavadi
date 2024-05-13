@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { z } from "zod";
 import { toast } from "sonner";
-import { createNewDriverData } from "@/backend/ApiConfig";
+import { createNewDriverData } from "@/app/(backend)/graph/graph-queries";
 import DriverImageUpload from "./driverImageUpload";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";

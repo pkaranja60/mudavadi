@@ -12,7 +12,8 @@ import {
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import React, { useEffect, useState } from "react";
-import { getAllDriversVehicles } from "@/backend/ApiConfig";
+import {getAllDriversVehicles} from "@/app/(backend)/graph/graph-queries";
+
 
 interface ChartData {
   name: string;

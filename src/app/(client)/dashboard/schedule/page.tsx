@@ -1,10 +1,9 @@
 "use client";
 
-import { getDriverSchedules } from "@/backend/ApiConfig";
+import { getDriverSchedules } from "@/app/(backend)/graph/graph-queries";
 import Loader from "@/components/loader";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
-import React from "react";
 import renderScheduleCards from "./components/card";
 
 export default function ScheduleTool() {

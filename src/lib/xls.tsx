@@ -1,10 +1,10 @@
-import { getAllDriversVehicles } from "@/backend/ApiConfig";
-import { DriverData } from "@/schema";
+import { getAllDriversVehicles } from "@/app/(backend)/graph/graph-queries";
+import {DriverColumn, DriverData} from "@/schema";
 import xlsx, { IJsonSheet } from "json-as-xlsx";
 
 export async function downloadToExcel() {
   // Fetch drivers data
-  const drivers: DriverData[] = await getAllDriversVehicles();
+  const drivers: DriverColumn[] = await getAllDriversVehicles();
 
   let columns: IJsonSheet[] = [
     {

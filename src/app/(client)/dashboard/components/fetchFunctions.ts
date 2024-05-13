@@ -1,4 +1,4 @@
-import { getAllDrivers, getAllVehicles } from "@/backend/ApiConfig";
+import {getAllDrivers, getAllVehicles} from "@/app/(backend)/graph/graph-queries";
 
 const FetchActiveVehicles = async () => {
   try {
