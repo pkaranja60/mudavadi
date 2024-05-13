@@ -42,10 +42,10 @@ export default function renderScheduleCards(data: any, className: string) {
             Slot: {schedule.slotNumber}
           </p>
 
-          <Trash2
+          {/* <Trash2
             className="w-5 h-5 text-red-500 hover:scale-125 mt-5 ml-auto"
             onClick={() => handleDeleteSchedule(schedule.id)}
-          />
+          /> */}
         </Card>
       ))}
     </div>
