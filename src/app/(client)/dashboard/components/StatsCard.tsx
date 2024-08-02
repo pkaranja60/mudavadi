@@ -52,8 +52,8 @@ export default function StatsCard() {
             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
           </svg>
         }
-        content="$45,231.89"
-        percentage={20.1}
+        content="0"
+        percentage={0}
       />
 
       <StatsCardItem
@@ -82,8 +82,8 @@ export default function StatsCard() {
             <path d="M18 21v-2" />
           </svg>
         }
-        content="+2350"
-        percentage={180.1}
+        content="0"
+        percentage={0}
       />
 
       <StatsCardItem

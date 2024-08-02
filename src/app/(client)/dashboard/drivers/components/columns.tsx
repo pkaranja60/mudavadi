@@ -14,6 +14,8 @@ import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
 import { useState } from "react";
 import ScheduleForm from "../../schedule/components/form";
 import Modal from "@/components/modal";
+import { deleteDriver } from "@/app/(backend)/graph/graph-queries";
+import { toast } from "sonner";
 
 const ScheduleCell = ({
   nationalId,
@@ -28,9 +30,9 @@ const ScheduleCell = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
 
- // Function to close the modal
+  // Function to close the modal
   const closeModal = () => {
-      setShowModal(false);
+    setShowModal(false);
   };
 
   const isVehicleActive = vehicleStatus === "active";
@@ -52,6 +54,21 @@ const ScheduleCell = ({
       </Modal>
     </>
   );
+};
+
+const handleDeleteDriver = async (id: string, vehicleReg: string) => {
+  try {
+    console.log(id, vehicleReg);
+    await deleteDriver(id, vehicleReg);
+
+    console.log("Driver deleted successfully");
+    toast.warning("Driver deleted successfully", {
+      duration: 5500,
+    });
+  } catch (error) {
+    console.error("Error deleting schedule:", error);
+    // Handle error (e.g., display toast or update UI with error message)
+  }
 };
 
 export const columns: ColumnDef<DriverColumn>[] = [
@@ -196,7 +213,9 @@ export const columns: ColumnDef<DriverColumn>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
+      const Id = row.original.id;
+      const { vehicleReg } = row.original.vehicle;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -210,7 +229,10 @@ export const columns: ColumnDef<DriverColumn>[] = [
               Update
               <SquarePen className="w-4 h-4 text-blue-500" />
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex justify-between">
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => Id && handleDeleteDriver(Id, vehicleReg)}
+            >
               Delete
               <Trash2 className="w-4 h-4 text-red-500" />
             </DropdownMenuItem>

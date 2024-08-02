@@ -1,9 +1,9 @@
 import * as z from "zod";
 
 const VehicleDriverSchema = z.object({
-  lastName: z.string(),
-  firstName: z.string(),
-  nationalId: z.string(),
+  lastName: z.string().optional(),
+  firstName: z.string().optional(),
+  nationalId: z.string().optional(),
 });
 
 const ActiveVehicleSchema = z.object({
@@ -33,7 +33,9 @@ const ColumnVehicleSchema = z.object({
 const getCurrentYear = () => new Date().getFullYear();
 
 const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
-const validateNumber  = z.string().regex(/^([1-9]|1\d|20)$/, 'Range between 1-20');
+const validateNumber = z
+  .string()
+  .regex(/^([1-9]|1\d|20)$/, "Range between 1-20");
 
 export const DriverSchema = z.object({
   firstName: z.string().min(1, {
@@ -118,6 +120,7 @@ export const DriverScheduleSchema = z.object({
 });
 
 export const DriverColumnSchema = z.object({
+  id: z.string().optional(),
   lastName: z.string(),
   firstName: z.string(),
   phoneNumber: z.string(),
