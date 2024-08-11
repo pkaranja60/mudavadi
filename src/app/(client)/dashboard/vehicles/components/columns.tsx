@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteVehicle } from "@/app/(backend)/graph/graph-queries";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +11,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { VehicleData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, SquarePen } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+
+const handleDeleteDriver = async (id: string) => {
+  try {
+    await deleteVehicle(id);
+
+    toast.success("Vehicle deleted successfully", {
+      duration: 5500,
+    });
+  } catch (error) {
+    toast.error("Vehicle not deleted", {
+      duration: 5500,
+    });
+  }
+};
+
+function handleDeleteDriverConfirmation(id: string) {
+  const isConfirmed = window.confirm(
+    "Are you sure you want to delete this driver?"
+  );
+  if (isConfirmed) {
+    handleDeleteDriver(id); // Proceed with deletion
+  }
+}
 
 export const columns: ColumnDef<VehicleData>[] = [
   {
@@ -48,22 +73,7 @@ export const columns: ColumnDef<VehicleData>[] = [
     accessorKey: "vehicleClass",
     header: "Vehicle Type",
   },
-  {
-    id: "driver",
-    header: "Driver Name",
-    cell: ({ row }) => {
-      const { firstName, lastName } = row.original.driver;
-      return <span>{`${firstName} ${lastName}`}</span>;
-    },
-  },
-  {
-    id: "national Id",
-    header: "National ID",
-    cell: ({ row }) => {
-      const { nationalId } = row.original.driver;
-      return <span>{nationalId}</span>;
-    },
-  },
+
   {
     header: "Status",
     id: "vehicleStatus",
@@ -100,7 +110,9 @@ export const columns: ColumnDef<VehicleData>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
+      const Id = row.original.id;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -113,6 +125,13 @@ export const columns: ColumnDef<VehicleData>[] = [
             <DropdownMenuItem className="flex justify-between">
               Update
               <SquarePen className="w-4 h-4 text-blue-500" />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex justify-between"
+              onClick={() => Id && handleDeleteDriverConfirmation(Id)}
+            >
+              Delete
+              <Trash2 className="w-4 h-4 text-red-500" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

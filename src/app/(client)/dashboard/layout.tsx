@@ -1,15 +1,15 @@
+import BottomNavbar from "@/components/ui/bottomnav";
 import Navbar from "@/components/ui/nav";
 import Sidebar from "@/components/ui/sidebar";
 
 export default function Layout({ children }: any) {
   return (
-    <main className="w-full h-screen flex flex-row relative">
-      <Sidebar />
+    <main className="min-w-max min-h-max">
+      {/* <Sidebar /> */}
+      <Navbar />
+      <div className="max-w-screen-2xl mx-auto mt-20">{children}</div>
 
-      <section className="w-screen h-screen flex flex-col ml-16">
-        <Navbar />
-        {children}
-      </section>
+      <BottomNavbar />
     </main>
   );
 }

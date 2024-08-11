@@ -53,6 +53,9 @@ export const DriverSchema = z.object({
     message: "Required",
   }),
   driverStatus: z.enum(["active", "suspended", "inactive"]).default("active"),
+});
+
+export const VehicleSchema = z.object({
   vehicleReg: z.string().min(1, {
     message: "Required",
   }),
@@ -60,7 +63,7 @@ export const DriverSchema = z.object({
     message: "Required",
   }),
   vehicleStatus: z.enum(["active", "inactive"]),
-  vehicleClass: z.enum(["Matatu", "Minibus", "Bus"]),
+  vehicleClass: z.enum(["matatu", "minibus", "bus"]),
 });
 
 export const ScheduleSchema = z.object({
@@ -74,6 +77,7 @@ export const ScheduleSchema = z.object({
 });
 
 export const DriverDataSchema = z.object({
+  id: z.string().optional(),
   lastName: z.string(),
   firstName: z.string(),
   phoneNumber: z.string(),
@@ -81,27 +85,14 @@ export const DriverDataSchema = z.object({
   licenseNumber: z.string(),
   licenseExpiration: z.date(),
   driverStatus: z.string(),
-  vehicleReg: z.string(),
-  insuranceExpiration: z.date(),
-  vehicleStatus: z.string(),
-  vehicleClass: z.string(),
 });
 
 export const VehicleDataSchema = z.object({
+  id: z.string().optional(),
   vehicleReg: z.string(),
   insuranceExpiration: z.date(),
   vehicleStatus: z.string(),
   vehicleClass: z.string(),
-  driver: VehicleDriverSchema,
-});
-
-export const ActiveDriverDataSchema = z.object({
-  nationalId: z.string(),
-  lastName: z.string(),
-  firstName: z.string(),
-  phoneNumber: z.string(),
-  driverStatus: z.string(),
-  vehicle: ActiveVehicleSchema,
 });
 
 export const ScheduleDataSchema = z.object({
@@ -119,21 +110,7 @@ export const DriverScheduleSchema = z.object({
   vehicle: ScheduleVehicleSchema,
 });
 
-export const DriverColumnSchema = z.object({
-  id: z.string().optional(),
-  lastName: z.string(),
-  firstName: z.string(),
-  phoneNumber: z.string(),
-  nationalId: z.string(),
-  licenseNumber: z.string(),
-  licenseExpiration: z.date(),
-  driverStatus: z.string(),
-  vehicle: ColumnVehicleSchema,
-});
-
 export type DriverData = z.infer<typeof DriverDataSchema>;
 export type VehicleData = z.infer<typeof VehicleDataSchema>;
-export type ActiveDriverData = z.infer<typeof ActiveDriverDataSchema>;
 export type ScheduleData = z.infer<typeof ScheduleDataSchema>;
 export type DriverScheduleData = z.infer<typeof DriverScheduleSchema>;
-export type DriverColumn = z.infer<typeof DriverColumnSchema>;

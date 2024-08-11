@@ -3,7 +3,12 @@
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "./button";
-import { BusFront, ContactRound, LayoutDashboard, CalendarCheck2  } from "lucide-react";
+import {
+  BusFront,
+  ContactRound,
+  LayoutDashboard,
+  CalendarCheck2,
+} from "lucide-react";
 import Link from "next/link";
 import NavLinks from "../navLinks";
 
@@ -83,47 +88,45 @@ export default function Sidebar() {
   };
 
   return (
-    <>
-      <motion.nav
-        variants={containerVariants}
-        animate={containerControls}
-        initial="close"
-        className="bg-[#ebebeb] flex flex-col z-10 gap-3.5 absolute top-0 left-0 h-full border-r-2 border-slate-200 "
-      >
-        <div className="flex flex-row justify-center place-items-center h-[76px] border-b-2 border-b-slate-300">
-          <Button
-            className="flex flex-col gap-2 w-full h-[76px] rounded-none justify-center bg-[#fdb255] hover:bg-slate-400"
-            onClick={handleOpenClose}
-          >
-            <motion.div
-              variants={topVariants}
-              animate={isOpen ? "opened" : "closed"}
-              className="w-11 h-1.5 bg-white rounded origin-left"
-            ></motion.div>
-            <motion.div
-              variants={centerVariants}
-              animate={isOpen ? "opened" : "closed"}
-              className="w-11 h-1.5 bg-white rounded"
-            ></motion.div>
-            <motion.div
-              variants={bottomVariants}
-              animate={isOpen ? "opened" : "closed"}
-              className="w-11 h-1.5 bg-white rounded origin-left"
-            ></motion.div>
-          </Button>
-        </div>
-        <div className="flex flex-col">
-          {/* LINKS */}
-          {links.map((link) => (
-            <NavLinks
-              key={link.title}
-              link={link}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-            />
-          ))}
-        </div>
-      </motion.nav>
-    </>
+    <motion.nav
+      variants={containerVariants}
+      animate={containerControls}
+      initial="close"
+      className="bg-[#ebebeb] hidden md:flex flex-col z-10 gap-3.5 absolute top-0 left-0 h-full "
+    >
+      <div className="flex flex-row justify-center place-items-center">
+        <Button
+          className="flex flex-col gap-2 w-full h-[75.4px] rounded-none justify-center bg-[#fdb255] hover:bg-slate-400"
+          onClick={handleOpenClose}
+        >
+          <motion.div
+            variants={topVariants}
+            animate={isOpen ? "opened" : "closed"}
+            className="w-11 h-1.5 bg-white rounded origin-left"
+          ></motion.div>
+          <motion.div
+            variants={centerVariants}
+            animate={isOpen ? "opened" : "closed"}
+            className="w-11 h-1.5 bg-white rounded"
+          ></motion.div>
+          <motion.div
+            variants={bottomVariants}
+            animate={isOpen ? "opened" : "closed"}
+            className="w-11 h-1.5 bg-white rounded origin-left"
+          ></motion.div>
+        </Button>
+      </div>
+      <div className="flex flex-col">
+        {/* LINKS */}
+        {links.map((link) => (
+          <NavLinks
+            key={link.title}
+            link={link}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
+        ))}
+      </div>
+    </motion.nav>
   );
 }

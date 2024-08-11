@@ -1,40 +1,35 @@
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ActiveDriverData, DriverData } from "@/schema";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {getActiveDriverVehicle} from "@/app/(backend)/graph/graph-queries";
+import { DriverData } from "@/schema";
+import { getAllDrivers } from "@/app/(backend)/graph/graph-queries";
 
 export default function ActiveDriver() {
-  const [drivers, setDrivers] = useState<ActiveDriverData[]>([]);
+  const [drivers, setDrivers] = useState<DriverData[]>([]);
+
+  const getAllDriverList = async () => {
+    try {
+      const activeDrivers = await getAllDrivers();
+
+      const activeDriver = activeDrivers.filter(
+        (driver) => driver.driverStatus === "active"
+      );
+
+      setDrivers(activeDriver.slice(0, 10)); // Set the drivers in state
+    } catch (error) {
+      console.error("Error fetching active driver", error);
+      // Handle error (e.g., display toast)
+    }
+  };
 
   useEffect(() => {
     getAllDriverList();
   }, []);
 
-  const getAllDriverList = async () => {
-    try {
-      const allDrivers = await getActiveDriverVehicle();
-      setDrivers(allDrivers.slice(0, 10)); // Set the drivers in state
-    } catch (error) {
-      console.error("Error fetching drivers:", error);
-      // Handle error (e.g., display toast)
-    }
-  };
-
   return (
-    <Card className="col-span-3">
+    <Card>
       <CardHeader>
-        <CardTitle>Active Drivers</CardTitle>
-        <CardDescription>Drivers with active vehicles.</CardDescription>
+        <CardTitle className="text-sm">Active Drivers</CardTitle>
       </CardHeader>
 
       <CardContent className="h-3/4">
@@ -65,11 +60,11 @@ export default function ActiveDriver() {
         ))}
       </CardContent>
 
-      <CardFooter>
+      {/* <CardFooter>
         <Link href="/dashboard/drivers" className="ml-auto">
           <Button variant="outline">More</Button>
         </Link>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

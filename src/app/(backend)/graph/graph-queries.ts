@@ -1,8 +1,6 @@
 import { gql, GraphQLClient, Variables } from "graphql-request";
 import { toast } from "sonner";
 import {
-  ActiveDriverData,
-  DriverColumn,
   DriverData,
   DriverScheduleData,
   ScheduleData,
@@ -18,7 +16,7 @@ const hygraph = new GraphQLClient(config.hygraphUrl, {
   },
 });
 
-// CREATE DRIVER AND VEHICLE DATA
+// CREATE DRIVER DATA
 const createNewDriverData = async (formData: DriverData) => {
   const variables: Variables = {
     lastName: formData.lastName,
@@ -28,10 +26,6 @@ const createNewDriverData = async (formData: DriverData) => {
     licenseNumber: formData.licenseNumber,
     licenseExpiration: formData.licenseExpiration,
     driverStatus: formData.driverStatus,
-    vehicleReg: formData.vehicleReg,
-    insuranceExpiration: formData.insuranceExpiration,
-    vehicleStatus: formData.vehicleStatus,
-    vehicleClass: formData.vehicleClass,
   };
   const mutationNewDriverData = gql`
     mutation CreateDriverData(
@@ -42,10 +36,6 @@ const createNewDriverData = async (formData: DriverData) => {
       $licenseNumber: String!
       $licenseExpiration: Date!
       $driverStatus: String!
-      $vehicleReg: String!
-      $insuranceExpiration: Date!
-      $vehicleStatus: String!
-      $vehicleClass: String!
     ) {
       createDriver(
         data: {
@@ -56,14 +46,6 @@ const createNewDriverData = async (formData: DriverData) => {
           licenseNumber: $licenseNumber
           licenseExpiration: $licenseExpiration
           driverStatus: $driverStatus
-          vehicle: {
-            create: {
-              vehicleReg: $vehicleReg
-              insuranceExpiration: $insuranceExpiration
-              vehicleStatus: $vehicleStatus
-              vehicleClass: $vehicleClass
-            }
-          }
         }
       ) {
         id
@@ -73,6 +55,46 @@ const createNewDriverData = async (formData: DriverData) => {
 
   try {
     return await hygraph.request(mutationNewDriverData, variables);
+  } catch (error: any) {
+    console.error("Error creating driver:", +error.message);
+    toast.error("Error creating drivers: ", {
+      duration: 5500,
+    });
+    return []; // Return empty array or handle error as needed
+  }
+};
+
+
+// CREATE VEHICLE DATA
+const createNewVehicleData = async (formData: VehicleData) => {
+  const variables: Variables = {
+    vehicleReg: formData.vehicleReg,
+    insuranceExpiration: formData.insuranceExpiration,
+    vehicleStatus: formData.vehicleStatus,
+    vehicleClass: formData.vehicleClass,
+  };
+  const mutationNewVehicleData = gql`
+    mutation CreateVehicleData(
+      $vehicleReg: String!
+      $insuranceExpiration: Date!
+      $vehicleStatus: String!
+      $vehicleClass: String!
+    ) {
+      createVehicle(
+        data: {
+          vehicleReg: $vehicleReg
+          insuranceExpiration: $insuranceExpiration
+          vehicleStatus: $vehicleStatus
+          vehicleClass: $vehicleClass
+        }
+      ) {
+        id
+      }
+    }
+  `;
+
+  try {
+    return await hygraph.request(mutationNewVehicleData, variables);
   } catch (error: any) {
     console.error("Error creating driver:", +error.message);
     toast.error("Error creating drivers: ", {
@@ -95,16 +117,12 @@ const getAllDrivers = async () => {
         licenseNumber
         licenseExpiration
         driverStatus
-        vehicle {
-          vehicleReg
-          vehicleStatus
-        }
       }
     }
   `;
 
   try {
-    const { drivers } = await hygraph.request<{ drivers: DriverColumn[] }>(
+    const { drivers } = await hygraph.request<{ drivers: DriverData[] }>(
       queryGetDrivers
     );
     return drivers;
@@ -127,11 +145,6 @@ const getAllVehicles = async () => {
         insuranceExpiration
         vehicleStatus
         vehicleClass
-        driver {
-          lastName
-          firstName
-          nationalId
-        }
       }
     }
   `;
@@ -146,40 +159,6 @@ const getAllVehicles = async () => {
     toast.error("Error fetching vehicles", {
       duration: 5500,
     });
-    return []; // Return empty array or handle error as needed
-  }
-};
-
-// GET ACTIVE DRIVERS AND VEHICLE
-const getActiveDriverVehicle = async () => {
-  const queryGetActiveDriverVehicle = gql`
-    query activeDriverVehicle {
-      drivers(
-        where: {
-          driverStatus: "active"
-          AND: { vehicle: { vehicleStatus: "active" } }
-        }
-      ) {
-        nationalId
-        lastName
-        firstName
-        phoneNumber
-        driverStatus
-        vehicle {
-          id
-          vehicleReg
-          vehicleClass
-        }
-      }
-    }
-  `;
-  try {
-    const { drivers } = await hygraph.request<{ drivers: ActiveDriverData[] }>(
-      queryGetActiveDriverVehicle
-    );
-    return drivers;
-  } catch (error: any) {
-    console.error("Error fetching drivers:", error.message);
     return []; // Return empty array or handle error as needed
   }
 };
@@ -270,68 +249,23 @@ const getDriverSchedules = async () => {
   }
 };
 
-// GET ALL DRIVERS & VEHICLES FOR EXCEL
-const getAllDriversVehicles = async () => {
-  const queryAllGetDriversVehicles = gql`
-    query Drivers {
-      drivers {
-        id
-        lastName
-        firstName
-        phoneNumber
-        nationalId
-        licenseNumber
-        licenseExpiration
-        driverStatus
-        vehicle {
-          vehicleReg
-          insuranceExpiration
-          vehicleStatus
-          vehicleClass
-        }
-      }
-    }
-  `;
-
-  try {
-    const { drivers } = await hygraph.request<{ drivers: DriverColumn[] }>(
-      queryAllGetDriversVehicles
-    );
-    return drivers;
-  } catch (error: any) {
-    console.error("Error fetching drivers:", error.message);
-    return []; // Return empty array or handle error as needed
-  }
-};
-
 // DELETE DRIVER
-const deleteDriver = async (id: string, vehicleReg: string) => {
+const deleteDriver = async (id: string,) => {
   const variables: Variables = {
     id: id,
-    vehicleReg: vehicleReg,
   };
   const mutationDeleteDriver = gql`
-    mutation deleteDriver($id: ID!, $vehicleReg: String!) {
-      deleteManyDrivers(
-        where: { id: $id, AND: { vehicle: { vehicleReg: $vehicleReg } } }
-      )
-      #     deleteDriver(where: { id: $id }) {
-      #   id
-      #   lastName
-      #   licenseExpiration
-      #   licenseNumber
-      #   nationalId
-      #   phoneNumber
-      #   firstName
-      #   driverStatus
-      #   vehicle {
-      #     vehicleReg
-      #     vehicleStatus
-      #     vehicleClass
-      #     id
-      #     insuranceExpiration
-      #   }
-      # }
+    mutation deleteDriver($id: ID!) {
+          deleteDriver(where: { id: $id }) {
+        id
+        lastName
+        licenseExpiration
+        licenseNumber
+        nationalId
+        phoneNumber
+        firstName
+        driverStatus
+      }
     }
   `;
 
@@ -342,6 +276,32 @@ const deleteDriver = async (id: string, vehicleReg: string) => {
     return []; // Return empty array or handle error as needed
   }
 };
+
+// DELETE VEHICLE
+const deleteVehicle = async (id: string,) => {
+  const variables: Variables = {
+    id: id,
+  };
+  const mutationDeleteVehicle = gql`
+    mutation deleteDriver($id: ID!) {
+      deleteVehicle(where: { id: $id  }) {
+        id
+        insuranceExpiration
+        vehicleClass
+        vehicleReg
+        vehicleStatus
+      }
+    }
+  `;
+
+  try {
+    return await hygraph.request(mutationDeleteVehicle, variables);
+  } catch (error: any) {
+    console.error("Error creating schedule:", error);
+    return []; // Return empty array or handle error as needed
+  }
+};
+
 // DELETE SCHEDULE
 const deleteSchedule = async (id: string) => {
   const variables: Variables = {
@@ -369,12 +329,12 @@ const deleteSchedule = async (id: string) => {
 
 export {
   createNewDriverData,
+  createNewVehicleData,
   getAllDrivers,
   getAllVehicles,
-  getActiveDriverVehicle,
   createNewSchedule,
   getDriverSchedules,
-  getAllDriversVehicles,
-  deleteSchedule,
   deleteDriver,
+  deleteVehicle,
+  deleteSchedule,
 };

@@ -56,10 +56,6 @@ export default function DriverForm() {
       licenseNumber: "",
       licenseExpiration: new Date(),
       driverStatus: "active",
-      vehicleReg: "",
-      insuranceExpiration: new Date(),
-      vehicleStatus: "active",
-      vehicleClass: "Matatu",
     },
   });
 
@@ -67,18 +63,16 @@ export default function DriverForm() {
     try {
       const result = await createNewDriverData(formData);
 
-      console.log(result);
+  
       if (result) {
         // Show toast notification for success
         toast.success("Driver created successfully!", {
-          duration: 5500,
+          duration: 5000,
         });
-        console.log("Driver created successfully!");
-        // Reset the form to its default values
         form.reset();
       } else {
         toast.error("Failed to create driver.", {
-          duration: 5500,
+          duration: 5000,
         });
       }
     } catch (error) {
@@ -94,9 +88,7 @@ export default function DriverForm() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex gap-3">
             {/* Driver */}
-            <div className="w-1/2">
               <div>
                 <FormField
                   control={form.control}
@@ -195,7 +187,7 @@ export default function DriverForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>License Expiration</FormLabel>
-                  
+
                       <FormMessage {...field} />
                     </FormItem>
                   )}
@@ -219,9 +211,9 @@ export default function DriverForm() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="active">active</SelectItem>
-                          <SelectItem value="suspended">suspended</SelectItem>
-                          <SelectItem value="inactive">inactive</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="suspended">Suspended</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage {...field} />
@@ -235,132 +227,7 @@ export default function DriverForm() {
                   )}
                 />
               </div>
-            </div>
-
-            {/* vehicle */}
-            <div className="w-1/2">
-              <div>
-                <FormField
-                  control={form.control}
-                  name="vehicleReg"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Registration Number</FormLabel>
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="KCDxxxxx" />
-                      </FormControl>
-                      <FormMessage {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div>
-                <FormField
-                  control={form.control}
-                  name="insuranceExpiration"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Insurance Expiration Date</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button variant="outline" className="w-full">
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                            captionLayout="dropdown-buttons"
-                            fromYear={getCurrentYear()}
-                            toYear={getYearAhead()}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div>
-                <FormField
-                  control={form.control}
-                  name="vehicleStatus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Type</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={field.value} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="active">active</SelectItem>
-                          <SelectItem value="inactive">inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage {...field} />
-                      <FormDescription className="text-xs">
-                        Select Vehicle type. Default option is{" "}
-                        <span className="text-red-300  font-medium">
-                          {field.value}
-                        </span>
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div>
-                <FormField
-                  control={form.control}
-                  name="vehicleClass"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Vehicle Class</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={field.value} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Matatu">Matatu</SelectItem>
-                          <SelectItem value="Minibus">Minibus</SelectItem>
-                          <SelectItem value="Bus">Bus</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage {...field} />
-                      <FormDescription className="text-xs">
-                        Select Vehicle type. Default option is{" "}
-                        <span className="text-red-300  font-medium">
-                          {field.value}
-                        </span>
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-          </div>
+     
 
           {/* button */}
           <div className="flex justify-center">

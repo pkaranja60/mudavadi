@@ -44,7 +44,7 @@ export default function ScheduleTool() {
   }
 
   return (
-    <main className="w-full px-14">
+    <main>
       <div className="h-24 flex items-center justify-between">
         <div className="text-2xl font-bold capitalize">
           <h1>{pathname.slice(1)}</h1>

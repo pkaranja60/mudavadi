@@ -1,56 +1,55 @@
 "use client";
 
-import {usePathname} from "next/navigation";
-import {DataTable} from "@/components/data-table";
-import {columns} from "./components/columns";
-import {useQuery} from "@tanstack/react-query";
-import {Button} from "@/components/ui/button";
-import {Plus} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { DataTable } from "@/components/data-table";
+import { columns } from "./components/columns";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import Modal from "@/components/modal";
-import {useState} from "react";
+import { useState } from "react";
 import Loader from "@/components/loader";
-import DriverForm from "./components/form";
-import {getAllDrivers} from "@/app/(backend)/graph/graph-queries";
+import DriverForm from "./components/Form";
+import { getAllDrivers } from "@/app/(backend)/graph/graph-queries";
 
 export default function DriverListPage() {
-    const pathname = usePathname();
-    const [showModal, setShowModal] = useState(false);
+  const pathname = usePathname();
+  const [showModal, setShowModal] = useState(false);
 
-    const {data: drivers, isLoading} = useQuery({
-        queryFn: () => getAllDrivers(),
-        queryKey: ["drivers"],
-    });
+  const { data: drivers, isLoading } = useQuery({
+    queryFn: () => getAllDrivers(),
+    queryKey: ["drivers"],
+  });
 
-    return (
-        <>
-            <main className="w-full px-14">
-                <div className="h-24 flex items-center justify-between">
-                    <div className="text-2xl font-bold capitalize">
-                        <h1>{pathname.slice(1)}</h1>
-                    </div>
+  return (
+    <main>
+      <div className="h-24 flex items-center justify-between">
+        <div className="text-2xl font-bold capitalize">
+          <h1>{pathname.slice(1)}</h1>
+        </div>
 
-                    <Button
-                        className="bg-green-700 hover:bg-green-600 capitalize gap-2"
-                        onClick={() => setShowModal(true)}
-                    >
-                        <Plus/>
-                        Create new driver
-                    </Button>
-                </div>
+        <Button
+          className="bg-green-700 hover:bg-green-600 capitalize gap-2"
+          onClick={() => setShowModal(true)}
+        >
+          <Plus />
+          Create new driver
+        </Button>
+      </div>
 
-                <div>
-                    {isLoading ? (
-                        <Loader loading={isLoading}/>
-                    ) : (
-                        <div>
-                            <DataTable columns={columns} data={drivers ?? []}/>
-                        </div>
-                    )}
-                </div>
-            </main>
-            <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-                <DriverForm/>
-            </Modal>
-        </>
-    );
+      <div>
+        {isLoading ? (
+          <Loader loading={isLoading} />
+        ) : (
+          <div>
+            <DataTable columns={columns} data={drivers ?? []} />
+          </div>
+        )}
+      </div>
+
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <DriverForm />
+      </Modal>
+    </main>
+  );
 }

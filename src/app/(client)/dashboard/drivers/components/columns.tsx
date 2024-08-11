@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DriverColumn } from "@/schema";
+import { DriverData } from "@/schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
 import { useState } from "react";
@@ -56,22 +56,21 @@ const ScheduleCell = ({
   );
 };
 
-const handleDeleteDriver = async (id: string, vehicleReg: string) => {
+const handleDeleteDriver = async (id: string) => {
   try {
-    console.log(id, vehicleReg);
-    await deleteDriver(id, vehicleReg);
+    await deleteDriver(id);
 
-    console.log("Driver deleted successfully");
-    toast.warning("Driver deleted successfully", {
+    toast.success("Driver deleted successfully", {
       duration: 5500,
     });
   } catch (error) {
-    console.error("Error deleting schedule:", error);
-    // Handle error (e.g., display toast or update UI with error message)
+   toast.error("Driver deleted successfully", {
+     duration: 5500,
+   });
   }
 };
 
-export const columns: ColumnDef<DriverColumn>[] = [
+export const columns: ColumnDef<DriverData>[] = [
   {
     accessorKey: "nationalId",
     header: "National ID",
@@ -190,32 +189,13 @@ export const columns: ColumnDef<DriverColumn>[] = [
       return <span style={style}>{driverStatus}</span>;
     },
   },
-  {
-    id: "schedule",
-    header: "Schedule",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const nationalId = row.original.nationalId;
-      const phoneNumber = row.original.phoneNumber;
-      const { vehicleReg, vehicleStatus } = row.original.vehicle;
-      return (
-        <>
-          <ScheduleCell
-            nationalId={nationalId}
-            phoneNumber={phoneNumber}
-            vehicleReg={vehicleReg}
-            vehicleStatus={vehicleStatus}
-          />
-        </>
-      );
-    },
-  },
+
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const Id = row.original.id;
-      const { vehicleReg } = row.original.vehicle;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -231,7 +211,7 @@ export const columns: ColumnDef<DriverColumn>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem
               className="flex justify-between"
-              onClick={() => Id && handleDeleteDriver(Id, vehicleReg)}
+              onClick={() => Id && handleDeleteDriver(Id)}
             >
               Delete
               <Trash2 className="w-4 h-4 text-red-500" />

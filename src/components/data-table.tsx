@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -43,9 +44,9 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [globalFilter, setGlobalFilter] = React.useState("");
-  // const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-  //   []
-  // );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -61,14 +62,14 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    // onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
     state: {
       globalFilter,
-      // columnFilters,
+      columnFilters,
       columnVisibility,
       sorting,
       pagination,
@@ -76,7 +77,6 @@ export function DataTable<TData, TValue>({
   });
 
   const pathname = usePathname();
-  const isDashboardDriverRoute = pathname === "/dashboard/drivers";
 
   return (
     <>
@@ -89,15 +89,13 @@ export function DataTable<TData, TValue>({
             onChange={(e) => setGlobalFilter(String(e.target.value))}
           />
 
-          {isDashboardDriverRoute && ( // Conditionally render button based on route
-            <Button
-              className="bg-[#fdb255] hover:bg-slate-400 gap-2"
-              onClick={() => downloadToExcel()}
-            >
-              <Sheet className="w-5 h-5" />
-              Export to Excel
-            </Button>
-          )}
+          <Button
+            className="bg-[#fdb255] hover:bg-slate-400 gap-2"
+            onClick={() => downloadToExcel(pathname)}
+          >
+            <Sheet className="w-5 h-5" />
+            Export to Excel
+          </Button>
         </div>
 
         <div>
