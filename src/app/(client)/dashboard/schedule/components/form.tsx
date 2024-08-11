@@ -121,7 +121,7 @@ export default function ScheduleForm({
     return (
         <div className="p-5">
             <CardHeader className="h-16 text-center text-2xl font-bold py-2">
-                Create New Schedule
+             New Schedule
             </CardHeader>
 
             <Form {...form}>

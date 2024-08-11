@@ -108,6 +108,10 @@ export const columns: ColumnDef<DriverData>[] = [
     header: "License Number",
   },
   {
+    accessorKey: "licenseClass",
+    header: "License Class",
+  },
+  {
     accessorKey: "licenseExpiration",
     header: ({ column }) => {
       return (

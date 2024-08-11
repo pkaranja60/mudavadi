@@ -19,12 +19,15 @@ export default function Dashboard() {
       <StatsCard />
 
       {/* Charts */}
-      <div className="">
-        <BarGraph />
-
-        <div className="flex max-w-xl items-center sm:max-w-[120px]">
-          {/* <DoughnutChart /> */}
+      <h1 className="text-xl font-medium text-center mt-10 mb-10">Overview</h1>
+      <div className="flex flex-col lg:flex-row gap-5">
+        <div className="flex-1 hidden md:block  rounded-xl border border-gray-200 p-4 shadow-chart sm:gap-6 sm:p-6">
+          <BarGraph />
         </div>
+
+        {/* <div className="rounded-xl border border-gray-200 p-4 shadow-chart sm:gap-6 sm:p-6">
+          <DoughnutChart />
+        </div> */}
       </div>
 
       <div className="">

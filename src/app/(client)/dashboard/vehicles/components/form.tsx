@@ -107,7 +107,7 @@ export default function VehicleForm() {
               name="insuranceExpiration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Insurance Expiration Date</FormLabel>
+                  <FormLabel>Insurance Expiration</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>

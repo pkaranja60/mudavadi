@@ -24,6 +24,7 @@ const createNewDriverData = async (formData: DriverData) => {
     phoneNumber: formData.phoneNumber,
     nationalId: formData.nationalId,
     licenseNumber: formData.licenseNumber,
+    licenseClass: formData.licenseClass,
     licenseExpiration: formData.licenseExpiration,
     driverStatus: formData.driverStatus,
   };
@@ -34,6 +35,7 @@ const createNewDriverData = async (formData: DriverData) => {
       $phoneNumber: String!
       $nationalId: String!
       $licenseNumber: String!
+      $licenseClass: String!
       $licenseExpiration: Date!
       $driverStatus: String!
     ) {
@@ -44,6 +46,7 @@ const createNewDriverData = async (formData: DriverData) => {
           phoneNumber: $phoneNumber
           nationalId: $nationalId
           licenseNumber: $licenseNumber
+          licenseClass: $licenseClass
           licenseExpiration: $licenseExpiration
           driverStatus: $driverStatus
         }
@@ -63,7 +66,6 @@ const createNewDriverData = async (formData: DriverData) => {
     return []; // Return empty array or handle error as needed
   }
 };
-
 
 // CREATE VEHICLE DATA
 const createNewVehicleData = async (formData: VehicleData) => {
@@ -115,6 +117,7 @@ const getAllDrivers = async () => {
         phoneNumber
         nationalId
         licenseNumber
+        licenseClass
         licenseExpiration
         driverStatus
       }
@@ -250,13 +253,13 @@ const getDriverSchedules = async () => {
 };
 
 // DELETE DRIVER
-const deleteDriver = async (id: string,) => {
+const deleteDriver = async (id: string) => {
   const variables: Variables = {
     id: id,
   };
   const mutationDeleteDriver = gql`
     mutation deleteDriver($id: ID!) {
-          deleteDriver(where: { id: $id }) {
+      deleteDriver(where: { id: $id }) {
         id
         lastName
         licenseExpiration
@@ -278,13 +281,13 @@ const deleteDriver = async (id: string,) => {
 };
 
 // DELETE VEHICLE
-const deleteVehicle = async (id: string,) => {
+const deleteVehicle = async (id: string) => {
   const variables: Variables = {
     id: id,
   };
   const mutationDeleteVehicle = gql`
     mutation deleteDriver($id: ID!) {
-      deleteVehicle(where: { id: $id  }) {
+      deleteVehicle(where: { id: $id }) {
         id
         insuranceExpiration
         vehicleClass

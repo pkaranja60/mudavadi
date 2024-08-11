@@ -29,9 +29,11 @@ export default function DoughnutChart() {
     labels: ["Bank 1", "Bank 2", "Bank 3"],
   };
   return (
-    <Doughnut
-      data={data}
-      options={{ cutout: "50%", plugins: { legend: { display: false } } }}
-    />
+    <div className="w-full h-full flex items-center justify-center">
+      <Doughnut
+        data={data}
+        options={{ cutout: "50%", plugins: { legend: { display: false } } }}
+      />
+    </div>
   );
 }

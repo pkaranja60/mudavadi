@@ -1,15 +1,19 @@
 "use client";
 
-
 import Loader from "@/components/loader";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import renderScheduleCards from "./components/card";
 import { getDriverSchedules } from "@/app/(backend)/graph/graph-queries";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Modal from "@/components/modal";
+import ScheduleForm from "./components/form";
 
 export default function ScheduleTool() {
   const pathname = usePathname();
+  const [showModal, setShowModal] = useState(false);
 
   const {
     data: schedules,
@@ -49,6 +53,14 @@ export default function ScheduleTool() {
         <div className="text-2xl font-bold capitalize">
           <h1>{pathname.slice(1)}</h1>
         </div>
+
+        <Button
+          className="bg-green-700 hover:bg-green-600 capitalize gap-2"
+          onClick={() => setShowModal(true)}
+        >
+          <Plus />
+          Schedule
+        </Button>
       </div>
 
       <div className="flex flex-col gap-5">
@@ -76,6 +88,10 @@ export default function ScheduleTool() {
           )}
         </div>
       </div>
+
+      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <ScheduleForm />
+      </Modal>
     </main>
   );
 }

@@ -21,15 +21,21 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 right-0 left-0 w-full h-[80px] px-20 flex items-center justify-between border-b-[1px] border-b-slate-200 transition-all duration-300 ${
+      className={`fixed top-0 right-0 left-0 w-full h-[80px] px-5 md:px-20 flex items-center justify-between border-b-[1px] border-b-slate-200 transition-all duration-300 ${
         isScrolled
           ? "bg-white bg-opacity-80 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-center">
-        <Image src="/bts-logo.png" alt="Image" width="90" height="90" />
-        <h1 className="text-2xl text-[#444444] font-bold">BTS</h1>
+        <Image
+          src="/bts-logo.png"
+          alt="Image"
+          width="90"
+          height="90"
+          className="w-16 h-16 md:w-20 md:h-20"
+        />
+        <h1 className="text-md md:text-2xl text-[#444444] font-bold">BTS</h1>
       </div>
 
       <div className="flex items-center gap-6">

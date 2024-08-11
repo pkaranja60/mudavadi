@@ -49,6 +49,7 @@ export const DriverSchema = z.object({
   licenseNumber: z.string().min(2, {
     message: "Required",
   }),
+  licenseClass: z.enum(["matatu", "minibus", "bus"]),
   licenseExpiration: z.date().min(new Date(getCurrentYear(), 0, 1), {
     message: "Required",
   }),
@@ -83,6 +84,7 @@ export const DriverDataSchema = z.object({
   phoneNumber: z.string(),
   nationalId: z.string(),
   licenseNumber: z.string(),
+  licenseClass: z.string(),
   licenseExpiration: z.date(),
   driverStatus: z.string(),
 });

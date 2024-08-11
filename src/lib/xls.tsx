@@ -24,6 +24,7 @@ export async function downloadToExcel(route: string) {
             { label: "First Name", value: "firstName" },
             { label: "Phone Number", value: "phoneNumber" },
             { label: "License Number", value: "licenseNumber" },
+            { label: "License Class", value: "licenseClass" },
             {
               label: "License Expiration",
               value: (row: any) =>
