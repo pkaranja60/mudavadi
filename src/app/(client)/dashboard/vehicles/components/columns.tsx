@@ -14,26 +14,26 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, SquarePen, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-const handleDeleteDriver = async (id: string) => {
+const handleDeleteVehicle = async (id: string) => {
   try {
     await deleteVehicle(id);
 
     toast.success("Vehicle deleted successfully", {
-      duration: 5500,
+      duration: 5000,
     });
   } catch (error) {
     toast.error("Vehicle not deleted", {
-      duration: 5500,
+      duration: 5000,
     });
   }
 };
 
-function handleDeleteDriverConfirmation(id: string) {
+function handleDeleteVehicleConfirmation(id: string) {
   const isConfirmed = window.confirm(
     "Are you sure you want to delete this driver?"
   );
   if (isConfirmed) {
-    handleDeleteDriver(id); // Proceed with deletion
+    handleDeleteVehicle(id); // Proceed with deletion
   }
 }
 
@@ -128,7 +128,7 @@ export const columns: ColumnDef<VehicleData>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem
               className="flex justify-between"
-              onClick={() => Id && handleDeleteDriverConfirmation(Id)}
+              onClick={() => Id && handleDeleteVehicleConfirmation(Id)}
             >
               Delete
               <Trash2 className="w-4 h-4 text-red-500" />

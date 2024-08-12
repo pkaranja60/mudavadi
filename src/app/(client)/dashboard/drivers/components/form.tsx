@@ -67,7 +67,7 @@ export default function DriverForm() {
       if (result) {
         // Show toast notification for success
         toast.success("Driver created successfully!", {
-          duration: 5000,
+          duration: 2000,
         });
         form.reset();
       } else {

@@ -1,41 +1,33 @@
 import * as z from "zod";
 
-const VehicleDriverSchema = z.object({
-  lastName: z.string().optional(),
-  firstName: z.string().optional(),
-  nationalId: z.string().optional(),
-});
+const getCurrentYear = () => new Date().getFullYear();
 
-const ActiveVehicleSchema = z.object({
-  id: z.string(),
-  vehicleReg: z.string(),
-  vehicleClass: z.string(),
-});
+// Custom phone number validator
+const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
+
+// Custom slot number validator
+const validateNumber = z
+  .string()
+  .regex(/^([1-9]|1\d|20)$/, "Range between 1-20");
+
+// Custom DateTime validator
+const dateTimeRegex =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})?$/;
+
+const dateTimeSchema = z.string().refine((value) => dateTimeRegex.test(value));
 
 const ScheduleDriverSchema = z.object({
+  id: z.string(),
   lastName: z.string(),
   firstName: z.string(),
   licenseNumber: z.string(),
 });
 
 const ScheduleVehicleSchema = z.object({
+  id: z.string(),
   vehicleReg: z.string(),
   vehicleClass: z.string(),
 });
-
-const ColumnVehicleSchema = z.object({
-  vehicleReg: z.string(),
-  insuranceExpiration: z.date(),
-  vehicleStatus: z.string(),
-  vehicleClass: z.string(),
-});
-
-const getCurrentYear = () => new Date().getFullYear();
-
-const phoneNumberValidation = z.string().regex(/^254\d{9}$/, "Required");
-const validateNumber = z
-  .string()
-  .regex(/^([1-9]|1\d|20)$/, "Range between 1-20");
 
 export const DriverSchema = z.object({
   firstName: z.string().min(1, {
@@ -68,10 +60,7 @@ export const VehicleSchema = z.object({
 });
 
 export const ScheduleSchema = z.object({
-  scheduleDate: z.date().min(new Date(getCurrentYear(), 0, 1), {
-    message: "Required",
-  }),
-  startTime: z.string().min(1, {
+  scheduleTime: z.date().min(new Date(getCurrentYear(), 0, 1), {
     message: "Required",
   }),
   slotNumber: validateNumber,
@@ -98,9 +87,12 @@ export const VehicleDataSchema = z.object({
 });
 
 export const ScheduleDataSchema = z.object({
-  scheduleDate: z.date(),
-  startTime: z.string(),
+  scheduledTime: dateTimeSchema,
   slotNumber: z.string(),
+  driverId: z.string(),
+  vehicleId: z.string(),
+  vehicleReg: z.string().optional(),
+  phoneNumber: z.string().optional(),
 });
 
 export const DriverScheduleSchema = z.object({

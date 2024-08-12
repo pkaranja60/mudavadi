@@ -5,34 +5,127 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import renderScheduleCards from "./components/card";
-import { getDriverSchedules } from "@/app/(backend)/graph/graph-queries";
+import {
+  automatedSchedule,
+  getSchedules,
+} from "@/app/(backend)/graph/graph-queries";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Modal from "@/components/modal";
 import ScheduleForm from "./components/form";
+import { scheduleDriversToVehicles } from "./components/schedule";
+import { ScheduleData } from "@/schema";
+import { toast } from "sonner";
 
 export default function ScheduleTool() {
   const pathname = usePathname();
   const [showModal, setShowModal] = useState(false);
+
+  function ensurePlusSign(phoneNumber?: string): string {
+    if (!phoneNumber) {
+      return ""; // Or handle the case where phoneNumber is missing
+    }
+    return phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+  }
+
+  const sendSms = async (scheduleData: ScheduleData) => {
+    const phoneNumber = scheduleData.phoneNumber;
+    try {
+      const response = await fetch("/api/send-sms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: ensurePlusSign(phoneNumber), // Ensure the phone number has a plus sign
+          message: `You are scheduled to drive vehicle ${
+            scheduleData.vehicleReg
+          } is scheduled for slot ${scheduleData.slotNumber} on ${new Date(
+            scheduleData.scheduledTime
+          ).toLocaleDateString()} at ${new Date(
+            scheduleData.scheduledTime
+          ).toLocaleTimeString()}.`, // Properly formatted message
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send SMS");
+      }
+
+      toast.success("SMS sent successfully", {
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Error sending SMS:", error);
+      // Handle error appropriately, e.g., show error message to the user
+    }
+  };
+
+  const handleAutoSchedule = async () => {
+    try {
+      // Get the schedule data
+      const scheduleData = await scheduleDriversToVehicles();
+
+      // Ensure the schedule data is not empty
+      if (scheduleData.length === 0) {
+        toast.info("No schedules to create.");
+        return;
+      }
+
+      // Handle the mutation for each schedule item
+      scheduleData.map(async (item) => {
+        try {
+          // Call automatedSchedule for each item
+          await automatedSchedule(item);
+        } catch (error) {
+          console.error("Error creating schedule for item:", item, error);
+          toast.error(
+            `Failed to create schedule for item ${item.slotNumber}.`,
+            {
+              duration: 5000,
+            }
+          );
+          return null; // Continue processing other items
+        }
+      });
+
+      // Show toast notification for success
+      toast.success("Schedule created successfully!", {
+        duration: 5000,
+      });
+
+      // Send SMS for each schedule item
+      await Promise.all(
+        scheduleData.map(async (item) => {
+          await sendSms(item);
+        })
+      );
+    } catch (error) {
+      console.error("Error during scheduling:", error);
+      toast.error("Failed to auto-schedule drivers.", {
+        duration: 5000,
+      });
+    }
+  };
 
   const {
     data: schedules,
     isLoading,
     isError,
   } = useQuery({
-    queryFn: () => getDriverSchedules(),
+    queryFn: () => getSchedules(),
     queryKey: ["schedules"],
   });
 
   // Filter schedules based on vehicleClass
   const Matatus = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "Matatu"
+    (schedule) => schedule.vehicle.vehicleClass === "matatu"
   );
   const Minibuses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "Minibus"
+    (schedule) => schedule.vehicle.vehicleClass === "minibus"
   );
   const Buses = schedules?.filter(
-    (schedule) => schedule.vehicle.vehicleClass === "Bus"
+    (schedule) => schedule.vehicle.vehicleClass === "bus"
   );
 
   if (isLoading) {
@@ -54,13 +147,21 @@ export default function ScheduleTool() {
           <h1>{pathname.slice(1)}</h1>
         </div>
 
-        <Button
-          className="bg-green-700 hover:bg-green-600 capitalize gap-2"
-          onClick={() => setShowModal(true)}
-        >
-          <Plus />
-          Schedule
-        </Button>
+        <div className="flex items-center gap-5">
+          <Button
+            className="bg-cyan-700 hover:bg-cyan-600 capitalize gap-2"
+            onClick={handleAutoSchedule}
+          >
+            Auto Schedule
+          </Button>
+          <Button
+            className="bg-green-700 hover:bg-green-600 capitalize gap-2"
+            onClick={() => setShowModal(true)}
+          >
+            <Plus />
+            Schedule
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-5">

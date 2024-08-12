@@ -70,6 +70,16 @@ const handleDeleteDriver = async (id: string) => {
   }
 };
 
+
+function handleDeleteDriverConfirmation(id: string) {
+  const isConfirmed = window.confirm(
+    "Are you sure you want to delete this driver?"
+  );
+  if (isConfirmed) {
+    handleDeleteDriver(id); // Proceed with deletion
+  }
+}
+
 export const columns: ColumnDef<DriverData>[] = [
   {
     accessorKey: "nationalId",
@@ -215,7 +225,7 @@ export const columns: ColumnDef<DriverData>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem
               className="flex justify-between"
-              onClick={() => Id && handleDeleteDriver(Id)}
+              onClick={() => Id && handleDeleteDriverConfirmation(Id)}
             >
               Delete
               <Trash2 className="w-4 h-4 text-red-500" />

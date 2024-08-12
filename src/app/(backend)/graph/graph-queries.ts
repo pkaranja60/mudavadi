@@ -166,71 +166,124 @@ const getAllVehicles = async () => {
   }
 };
 
-// CREATE DRIVER AND VEHICLE DATA
-const createNewSchedule = async (
-  formData: ScheduleData,
-  nationalId: string,
-  vehicleReg: string
-) => {
+// CREATE SCHEDULING DATA
+// MANUALLY SCHEDULE
+// const manualSchedule = async (
+//   formData: ScheduleData,
+//   nationalId: string,
+//   vehicleReg: string
+// ) => {
+//   const variables: Variables = {
+//     scheduleDate: formData.scheduleDate,
+//     startTime: formData.startTime,
+//     slotNumber: formData.slotNumber,
+//     nationalId: nationalId,
+//     vehicleReg: vehicleReg,
+//   };
+
+//   const mutationNewSchedule = gql`
+//     mutation createSchedule(
+//       $scheduleDate: Date!
+//       $startTime: String!
+//       $slotNumber: String!
+//       $nationalId: String!
+//       $vehicleReg: String!
+//     ) {
+//       createSchedule(
+//         data: {
+//           driver: { connect: { Driver: { nationalId: $nationalId } } }
+//           vehicle: { connect: { Vehicle: { vehicleReg: $vehicleReg } } }
+//           slotNumber: $slotNumber
+//           startTime: $startTime
+//           scheduleDate: $scheduleDate
+//         }
+//       ) {
+//         id
+//         scheduleDate
+//         startTime
+//         slotNumber
+//       }
+//     }
+//   `;
+
+//   try {
+//     return await hygraph.request(mutationNewSchedule, variables);
+//   } catch (error: any) {
+//     console.error("Error creating schedule:", error);
+//     return []; // Return empty array or handle error as needed
+//   }
+// };
+
+// AUTOMATICALLY SCHEDULE
+const automatedSchedule = async (scheduleData: ScheduleData) => {
+  const { scheduledTime, slotNumber, driverId, vehicleId } = scheduleData;
+
   const variables: Variables = {
-    scheduleDate: formData.scheduleDate,
-    startTime: formData.startTime,
-    slotNumber: formData.slotNumber,
-    nationalId: nationalId,
-    vehicleReg: vehicleReg,
+    scheduleTime: scheduledTime,
+    slotNumber: slotNumber,
+    driverId: driverId,
+    vehicleId: vehicleId,
   };
 
-  const mutationNewSchedule = gql`
+  const mutationAutomatedSchedule = gql`
     mutation createSchedule(
-      $scheduleDate: Date!
-      $startTime: String!
+      $scheduleTime: String!
       $slotNumber: String!
-      $nationalId: String!
-      $vehicleReg: String!
+      $driverId: ID!
+      $vehicleId: ID!
     ) {
       createSchedule(
         data: {
-          driver: { connect: { Driver: { nationalId: $nationalId } } }
-          vehicle: { connect: { Vehicle: { vehicleReg: $vehicleReg } } }
           slotNumber: $slotNumber
-          startTime: $startTime
-          scheduleDate: $scheduleDate
+          scheduleTime: $scheduleTime
+          driver: { connect: { Driver: { id: $driverId } } }
+          vehicle: { connect: { Vehicle: { id: $vehicleId } } }
         }
       ) {
         id
-        scheduleDate
-        startTime
+        scheduleTime
         slotNumber
+        driver {
+          ... on Driver {
+            id
+          }
+        }
+        vehicle {
+          ... on Vehicle {
+            id
+          }
+        }
       }
     }
   `;
 
   try {
-    return await hygraph.request(mutationNewSchedule, variables);
+    return await hygraph.request(mutationAutomatedSchedule, variables);
   } catch (error: any) {
     console.error("Error creating schedule:", error);
     return []; // Return empty array or handle error as needed
   }
 };
 
-// GET PER VEHICLE TYPE
-const getDriverSchedules = async () => {
-  const queryGetDriverSchedules = gql`
+// GET SCHEDULES
+const getSchedules = async () => {
+  const queryGetSchedules = gql`
     query schedules {
       schedules {
         id
-        scheduleDate
-        startTime
+        scheduleTime
         slotNumber
         driver {
           ... on Driver {
-            lastName
+            id
             firstName
+            lastName
             licenseNumber
           }
         }
         vehicle {
           ... on Vehicle {
+            id
             vehicleReg
             vehicleClass
           }
@@ -241,7 +294,7 @@ const getDriverSchedules = async () => {
   try {
     const { schedules } = await hygraph.request<{
       schedules: DriverScheduleData[];
-    }>(queryGetDriverSchedules);
+    }>(queryGetSchedules);
     return schedules;
   } catch (error: any) {
     console.error("Error fetching schedule:", error.message);
@@ -314,10 +367,18 @@ const deleteSchedule = async (id: string) => {
     mutation deleteSchedule($id: ID!) {
       deleteSchedule(where: { id: $id }) {
         id
-        scheduleDate
-        startTime
+        scheduleTime
         slotNumber
-        stage
+        driver {
+          ... on Driver {
+            id
+          }
+        }
+        vehicle {
+          ... on Vehicle {
+            id
+          }
+        }
       }
     }
   `;
@@ -335,8 +396,9 @@ export {
   createNewVehicleData,
   getAllDrivers,
   getAllVehicles,
-  createNewSchedule,
-  getDriverSchedules,
+  // manualSchedule,
+  automatedSchedule,
+  getSchedules,
   deleteDriver,
   deleteVehicle,
   deleteSchedule,
