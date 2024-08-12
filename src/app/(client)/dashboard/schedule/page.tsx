@@ -154,13 +154,13 @@ export default function ScheduleTool() {
           >
             Auto Schedule
           </Button>
-          <Button
+          {/* <Button
             className="bg-green-700 hover:bg-green-600 capitalize gap-2"
             onClick={() => setShowModal(true)}
           >
             <Plus />
             Schedule
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -189,10 +189,10 @@ export default function ScheduleTool() {
           )}
         </div>
       </div>
-
+{/* 
       <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
         <ScheduleForm />
-      </Modal>
+      </Modal> */}
     </main>
   );
 }
