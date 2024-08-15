@@ -13,7 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Trash2, SquarePen } from "lucide-react";
 import { useState } from "react";
 import ScheduleForm from "../../schedule/components/form";
-import Modal from "@/components/modal";
+import Modal from "@/components/Modal";
 import { deleteDriver } from "@/app/(backend)/graph/graph-queries";
 import { toast } from "sonner";
 
@@ -64,12 +64,11 @@ const handleDeleteDriver = async (id: string) => {
       duration: 5500,
     });
   } catch (error) {
-   toast.error("Driver deleted successfully", {
-     duration: 5500,
-   });
+    toast.error("Driver deleted successfully", {
+      duration: 5500,
+    });
   }
 };
-
 
 function handleDeleteDriverConfirmation(id: string) {
   const isConfirmed = window.confirm(
