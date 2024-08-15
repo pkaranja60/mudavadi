@@ -1,14 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { DataTable } from "@/components/data-table";
+import { DataTable } from "@/components/DataTable";
 import { columns } from "./components/columns";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import Modal from "@/components/modal";
+import Modal from "@/components/Modal";
 import { useState } from "react";
-import Loader from "@/components/loader";
+import Loader from "@/components/Loader";
 import DriverForm from "./components/Form";
 import { getAllDrivers } from "@/app/(backend)/graph/graph-queries";
 
