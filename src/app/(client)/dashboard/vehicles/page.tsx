@@ -1,15 +1,15 @@
 "use client";
 
 import { getAllVehicles } from "@/app/(backend)/graph/graph-queries";
-import { DataTable } from "@/components/data-table";
-import Loader from "@/components/loader";
+import { DataTable } from "@/components/DataTable";
+import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { columns } from "./components/columns";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import Modal from "@/components/modal";
+import Modal from "@/components/Modal";
 import VehicleForm from "./components/form";
 
 export default function VehicleListPage() {
