@@ -5,7 +5,7 @@ import {
   FetchAllDrivers,
   FetchAllInactiveDrivers,
   FetchInactiveVehicles,
-} from "./fetchFunctions";
+} from "../utils/fetchFunctions";
 
 export default function StatsCard() {
   const [activeVehiclesCount, setActiveVehiclesCount] = useState<number>(0);
