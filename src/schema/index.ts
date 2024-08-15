@@ -108,3 +108,59 @@ export type DriverData = z.infer<typeof DriverDataSchema>;
 export type VehicleData = z.infer<typeof VehicleDataSchema>;
 export type ScheduleData = z.infer<typeof ScheduleDataSchema>;
 export type DriverScheduleData = z.infer<typeof DriverScheduleSchema>;
+
+export const applicationFormSchema = (type: "driver" | "vehicle") => {
+  return z.object({
+    id: z.string().optional(),
+    lastName:
+      type === "driver"
+        ? z.string().optional()
+        : z.string().min(2, { message: "Required *" }),
+    firstName:
+      type === "driver"
+        ? z.string().optional()
+        : z.string().min(2, { message: "Required *" }),
+    phoneNumber:
+      type === "driver" ? z.string().optional() : phoneNumberValidation,
+    nationalId:
+      type === "driver"
+        ? z.string().optional()
+        : z.string().min(4, { message: "Required *" }),
+    licenseNumber:
+      type === "driver"
+        ? z.string().optional()
+        : z.string().min(3, { message: "Required *" }),
+    licenseClass:
+      type === "driver"
+        ? z.enum(["matatu", "minibus", "bus"]).optional()
+        : z.enum(["matatu", "minibus", "bus"]).default("matatu"),
+    // licenseExpiration:
+    //   type === "driver"
+    //     ? z.date()
+    //     : z.date().min(new Date(getCurrentYear(), 0, 1), {
+    //         message: "Required",
+    //       }),
+    // driverStatus:
+    //   type === "driver"
+    //     ? z.enum(["active", "suspended", "inactive"]).optional()
+    //     : z.enum(["active", "suspended", "inactive"]).default("active"),
+    vehicleReg:
+      type === "vehicle"
+        ? z.string().optional()
+        : z.string().min(3, { message: "Required *" }),
+    // insuranceExpiration:
+    //   type === "vehicle"
+    //     ? z.date().optional()
+    //     : z.date().min(new Date(getCurrentYear(), 0, 1), {
+    //         message: "Required",
+    //       }),
+    // vehicleStatus:
+    //   type === "vehicle"
+    //     ? z.enum(["active", "inactive"]).optional()
+    //     : z.enum(["active", "inactive"]).default("active"),
+    // vehicleClass:
+    //   type === "vehicle"
+    //     ? z.enum(["matatu", "minibus", "bus"]).optional()
+    //     : z.enum(["matatu", "minibus", "bus"]).default("matatu"),
+  });
+};
