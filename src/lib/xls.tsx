@@ -3,11 +3,22 @@ import {
   getAllVehicles,
 } from "@/app/(backend)/graph/graph-queries";
 import { DriverData, VehicleData } from "@/schema";
-import xlsx, { IJsonSheet } from "json-as-xlsx";
+import xlsx, { IContent, IJsonSheet } from "json-as-xlsx";
 import { toast } from "sonner";
 
+interface ScheduleData extends IContent {
+  vehicleReg: string;
+  slotNumber: string;
+  // driverName: string;
+  scheduledTime: string;
+  tripNumber: number;
+}
+
 // Update the function to accept a route parameter
-export async function downloadToExcel(route: string) {
+export async function downloadToExcel(
+  route: string,
+  scheduleData?: ScheduleData[]
+) {
   try {
     let columns: IJsonSheet[] = [];
     let fileNameSuffix = "";
@@ -66,6 +77,22 @@ export async function downloadToExcel(route: string) {
         });
         fileNameSuffix = "Vehicles";
       }
+    }
+
+    if (route.includes("/schedule")) {
+      const data: ScheduleData[] = scheduleData ?? [];
+      columns.push({
+        sheet: "Trips",
+        columns: [
+          { label: "Vehicle Registration", value: "vehicleReg" },
+          { label: "Slot Number", value: "slotNumber" },
+          // { label: "Driver Name", value: "driverName" },
+          { label: "Scheduled Time", value: "scheduledTime" },
+          { label: "Trip Number", value: "tripNumber" },
+        ],
+        content: data,
+      });
+      fileNameSuffix = "Trips Data";
     }
 
     // // Check if there is any data to export
