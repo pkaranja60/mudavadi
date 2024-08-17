@@ -37,6 +37,7 @@ import DriverImageUpload from "./driverImageUpload";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useQueryClient } from "@tanstack/react-query";
 
 const getCurrentYear = () => new Date().getFullYear();
 
@@ -46,6 +47,7 @@ const getYearAhead = (years = 10) => {
 };
 
 export default function DriverForm() {
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof DriverSchema>>({
     resolver: zodResolver(DriverSchema),
     defaultValues: {
@@ -65,6 +67,7 @@ export default function DriverForm() {
       const result = await createNewDriverData(formData);
 
       if (result) {
+        await queryClient.invalidateQueries({ queryKey: ["drivers"] });
         // Show toast notification for success
         toast.success("Driver created successfully!", {
           duration: 2000,
